@@ -1,0 +1,79 @@
+#typed {
+  font-size: 0.9em;
+  font-weight: 700;
+  line-height: 1.0;
+  color: #2196F3;
+  text-shadow: 2px 2px 4px rgba(33, 150, 243, 0.3);
+}
+
+/* Make sure the cursor aligns with the text */
+.typed-cursor {
+  font-size: 1.0em;
+  opacity: 1;
+  animation: blink 0.7s infinite;
+  text-shadow: 2px 2px 4px rgba(33, 150, 243, 0.3);
+}
+
+/* Hide the strings container */
+#typed-strings {
+  display: none;
+}
+
+@keyframes blink {
+  0% { opacity: 1; }
+  50% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+/* General Figure and Caption Styles */
+figure {
+    width: 100%;
+    max-width: 100%;
+    margin: 2rem auto;
+    text-align: center;
+}
+
+figure img {
+    width: 100%;
+    height: auto;
+    max-width: 100%;
+    display: block;
+    margin: 0 auto;
+}
+
+figcaption {
+    text-align: center;
+    margin-top: 1rem;
+    font-style: italic;
+    color: #666;
+    font-size: 0.9rem;
+}
+
+/* Experience Summary Figure Specific Styles */
+#experience-summary img {
+    max-width: 100%;
+    margin: 0 auto;
+}
+
+#experience-summary figcaption {
+    color: #495057;
+    font-weight: 500;
+    margin-top: 1.5rem;
+}
+
+/* Logo image adjustment */
+img[src*="logo.png"] {
+    margin-bottom: 0rem !important;
+    display: block;
+}
+
+.bio-description {
+    font-size: 1.1em;
+    line-height: 1.4;
+    color: #333;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+    font-weight: normal;
+    text-align: center;
+    padding: 0 1rem;
+}
