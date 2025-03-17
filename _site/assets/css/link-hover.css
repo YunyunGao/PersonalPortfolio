@@ -1,0 +1,47 @@
+/* Custom link styling for inline links */
+a.inline-link {
+  text-decoration: none;
+  color: #0366d6;
+  position: relative;
+  display: inline-block;
+  transition: color 0.3s ease;
+}
+
+a.inline-link:hover {
+  color: #2196F3;
+  text-decoration: none;
+  font-weight: normal;  /* Override the default bold behavior */
+}
+
+/* Underline animation effect for inline links */
+a.inline-link::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 1px;
+  bottom: -2px;
+  left: 0;
+  background-color: #2196F3;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.3s ease;
+}
+
+a.inline-link:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+/* Preserve bold hover effect for standalone links */
+a:not(.inline-link):hover,
+a:not(.inline-link):focus {
+  color: #069;
+  font-weight: bold;
+}
+
+/* Preserve bold hover effect for download links */
+.downloads a:not(.inline-link):hover,
+.downloads a:not(.inline-link):focus {
+  color: #675C5C;
+  font-weight: bold;
+} 

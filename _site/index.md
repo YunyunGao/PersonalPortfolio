@@ -31,12 +31,17 @@ I'm a method developer focused on transforming data into actionable insights. I 
   <figcaption>A small summary of things I've been doing</figcaption>
 </figure>
 
-[Project 1 Title](/sample_page)
-<img src="images/dummy_thumbnail.jpg?raw=true"/>
+<a class="inline-link" href="sample_page.html"><b>1. Predict the Fiedality of Time Series</b></a>
+
+A solution I 
+
+<img src="images/score_shannon.webp?raw=true"/>
 
 ---
-[Project 2 Title](/pdf/sample_presentation.pdf)
-<img src="images/dummy_thumbnail.jpg?raw=true"/>
+[2. HELCARAXE](/pdf/sample_presentation.pdf)
+
+
+<img src="images/helcaraxe_cnn.JPG?raw=true"/>
 
 ---
 [Project 3 Title](http://example.com/)

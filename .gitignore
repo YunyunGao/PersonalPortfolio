@@ -1,0 +1,16 @@
+# Files containing 'copy' in their names
+*[Cc]opy*
+
+# Files containing 'test' in their names
+*[Tt]est*
+
+# Common patterns
+.DS_Store
+Thumbs.db
+*.log
+*.tmp
+*.temp
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db 

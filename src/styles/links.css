@@ -1,0 +1,28 @@
+.inline-link {
+  text-decoration: none;
+  color: inherit;
+  display: inline-block;
+  position: relative;
+}
+
+.inline-link:hover {
+  color: #007bff;
+}
+
+.inline-link::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 1px;
+  bottom: -2px;
+  left: 0;
+  background-color: #007bff;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.3s ease;
+}
+
+.inline-link:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
+} 
