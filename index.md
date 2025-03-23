@@ -28,24 +28,24 @@ I'm a method developer focused on transforming data into actionable insights. I 
 
 <figure id="experience-summary">
   <img src="images/flow_portfolio_v1.drawio.svg?raw=ture"/>
-  <figcaption>A small summary of things I've been doing</figcaption>
+  <figcaption style="text-align: center;">A small summary of things I've been doing</figcaption>
 </figure>
 
-<a class="inline-link" href="sample_page.html"><b>1. Predict the Fiedality of Time Series</b></a>
 
-A solution I 
 
-<img src="images/score_shannon.webp?raw=true"/>
+<a class="inline-link" href="project_1.html"><b>1. Predict the True Time Series from a Noisy and Contaminated Background</b></a>
+
+<img src="images/score_shannon.webp?raw=true"  style="width: 50%; padding-left: 20%;"/>
 
 ---
-[2. HELCARAXE](/pdf/sample_presentation.pdf)
+<a class="inline-link" href="project_2.html"><b>2. HELCARAXE: A CNN model to Predict Spiky Artefact in Data</b></a>
 
 
 <img src="images/helcaraxe_cnn.JPG?raw=true"/>
 
 ---
-[Project 3 Title](http://example.com/)
-<img src="images/dummy_thumbnail.jpg?raw=true"/>
+<a class="inline-link" href="project_3.html"><b>3. Unlocking the Secret Code of Antibodies: A Data-Driven Journey</b></a>
+<img src="images/fab_flexible.gif?raw=true"  style="width: 45%; padding-left: 25%; padding-top: 1rem;"/>
 
 ---
 

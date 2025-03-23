@@ -9,6 +9,10 @@ Thanks for visiting! 🙌
 
 ---
 
+## 📌 Changelog v0.0.2
+
+- Finished project 1-3
+
 ## 📌 Changelog v0.0.1
 
 - Modified Jekyll template

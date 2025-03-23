@@ -25,6 +25,12 @@
   100% { opacity: 1; }
 }
 
+/* Right Panel Width */
+section {
+  width: 530px;
+  float: right;
+}
+
 /* General Figure and Caption Styles */
 figure {
     width: 100%;
@@ -42,7 +48,7 @@ figure img {
 }
 
 figcaption {
-    text-align: center;
+    text-align: justify;
     margin-top: 1rem;
     font-style: italic;
     color: #666;
@@ -61,6 +67,12 @@ figcaption {
     margin-top: 1.5rem;
 }
 
+#experience-summary:hover {
+  transition: transform 0.3s ease; 
+  cursor: pointer;
+  transform: scale(1.1);
+}
+
 /* Logo image adjustment */
 img[src*="logo.png"] {
     margin-bottom: 0rem !important;
@@ -68,12 +80,28 @@ img[src*="logo.png"] {
 }
 
 .bio-description {
+    width: 100%;
+    max-width: 270px;
+    margin: 0;
+    padding: 0;
+    position: relative;
+    left: 50px;
+    right: 0;
     font-size: 1.1em;
-    line-height: 1.4;
+    line-height: 0.9;
     color: #333;
-    margin-top: 0.5rem;
-    margin-bottom: 0.5rem;
-    font-weight: normal;
-    text-align: center;
-    padding: 0 1rem;
+
+}
+
+.bio-description br {
+    display: block;
+    content: "";
+    margin-top: 0.5em;
+}
+
+@media print, screen and (max-width: 960px) {
+    .bio-description {
+        max-width: 100%;
+        position: static;
+    }
 }

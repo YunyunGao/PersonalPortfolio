@@ -2,8 +2,8 @@ title: Yunyun Gao # your name (or website title) here
 logo: "/images/logo.png?raw=true" # your photo (or logo) here
 description: >
   <div class="bio-description">
-    PhD in Biophysics <br>
-    MSc in Material Science <br>
+    Ph.D. in Biophysics <br>
+    M.Sc. in Material Science <br>
     Method Developer <br>
     Research Programmer
   </div>
@@ -16,3 +16,7 @@ remote_theme: pages-themes/minimal@v0.2.0
 plugins:
 - jekyll-remote-theme
 google_analytics: UA-000000-0 # your Google Analytics tracking ID here
+
+# Add custom CSS
+head_scripts:
+  - /assets/css/custom.css
