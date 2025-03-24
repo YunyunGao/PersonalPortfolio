@@ -34,28 +34,20 @@ I'm a method developer focused on transforming data into actionable insights. I 
 
 
 <a class="inline-link" href="project_1.html"><b>1. Predict the True Time Series from a Noisy and Contaminated Background</b></a>
-
-<img src="images/score_shannon.webp?raw=true"  style="width: 50%; padding-left: 20%;"/>
+<img src="images/score_shannon.webp?raw=true"  style="width: 50%; padding-left: 20%; margin-top: 1rem"/>
 
 ---
 <a class="inline-link" href="project_2.html"><b>2. HELCARAXE: A CNN model to Predict Spiky Artefact in Data</b></a>
-
-
-<img src="images/helcaraxe_cnn.JPG?raw=true"/>
+<img src="images/helcaraxe_cnn.JPG?raw=true" style="margin-top: 1rem"/>
 
 ---
 <a class="inline-link" href="project_3.html"><b>3. Unlocking the Secret Code of Antibodies: A Data-Driven Journey</b></a>
-<img src="images/fab_flexible.gif?raw=true"  style="width: 45%; padding-left: 25%; padding-top: 1rem;"/>
+<img src="images/fab_flexible.gif?raw=true"  style="width: 45%; padding-left: 25%; margin-top: 1rem;"/>
 
 ---
 
-### Category Name 2
-
-- [Project 1 Title](http://example.com/)
-- [Project 2 Title](http://example.com/)
-- [Project 3 Title](http://example.com/)
-- [Project 4 Title](http://example.com/)
-- [Project 5 Title](http://example.com/)
+<a class="inline-link" href="project_4.html"><b>4. Structural Biology with Modern CI/CD: the Coronavirus Structure Taskforce</b></a>
+<img src="images/cstf_banner.png?raw=true" style="width: 100%; margin-top: 1rem;"/>
 
 ---
 
@@ -63,5 +55,4 @@ I'm a method developer focused on transforming data into actionable insights. I 
 
 
 ---
-<p style="font-size:11px">Page template forked from <a href="https://github.com/evanca/quick-portfolio">evanca</a></p>
-<!-- Remove above link if you don't want to attibute -->
+

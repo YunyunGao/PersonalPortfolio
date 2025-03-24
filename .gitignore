@@ -1,8 +1,16 @@
+# Jekyll build directory
+_site/
+
 # Files containing 'copy' in their names
 *[Cc]opy*
 
 # Files containing 'test' in their names
 *[Tt]est*
+
+# Bundler dependencies
+vendor/
+.bundle/
+.jekyll-cache/
 
 # Common patterns
 .DS_Store
@@ -13,4 +21,10 @@ Thumbs.db
 ._*
 .Spotlight-V100
 .Trashes
-ehthumbs.db 
+ehthumbs.db
+
+# IDE and editor files
+.idea/
+.vscode/
+*.swp
+*.swo 
