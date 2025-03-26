@@ -27,7 +27,7 @@ I'm a method developer focused on transforming data into actionable insights. I 
 </div>
 
 <figure id="experience-summary">
-  <img src="images/flow_portfolio_v1.drawio.svg?raw=ture"/>
+  <img src="images/flow_portfolio_v1.drawio.svg?raw=true"/>
   <figcaption style="text-align: center;">A small summary of things I've been doing</figcaption>
 </figure>
 
