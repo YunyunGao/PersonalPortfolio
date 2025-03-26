@@ -53,6 +53,5 @@ I'm a method developer focused on transforming data into actionable insights. I 
 
 
 
-
 ---
 
