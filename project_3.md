@@ -1,13 +1,12 @@
 ## Unlocking the Secret Code of Antibodies: A Data-Driven Journey to Better Therapies
 
 <div style="text-align: justify; margin: 2rem 0;">
-Imagine a world where our body’s own defenders—antibodies—can be fine-tuned like the gears in a precision watch to better fight infections and cancer. In a recent breakthrough, scientists uncovered how tiny changes in an antibody’s “hinge” region can dramatically affect its performance. This discovery not only sheds light on the inner workings of our immune system but also opens the door to engineering next-generation therapeutics using data-driven methods.
+Imagine a world where our body’s own defenders—antibodies—can be fine-tuned like the gears in a precision watch to better fight infections and cancer. With the help of data-driven methods, I helped my collaborators uncovered how tiny changes in an antibody’s “hinge” region can dramatically affect its performance. This discovery not only sheds light on the inner workings of our immune system but also opens the door to engineering next-generation therapeutics using data-driven methods.
 </div>
 
 ---
 
 ### The Challenge of Fine-Tuning Antibodies
-
 
 <div style="text-align: justify;">
 Antibodies are proteins that help our body identify and neutralize harmful invaders. Among them, the IgG2 class stands out. Unlike its relatives, IgG2 has a unique hinge—a flexible connector that can rearrange its chemical bonds. This ability, known as disulfide shuffling, acts like a molecular switch, controlling how the antibody binds to immune receptors and, in turn, how it activates the immune response. However, for years scientists puzzled over exactly how this tiny hinge could make such a big difference.
@@ -27,6 +26,7 @@ Antibodies are proteins that help our body identify and neutralize harmful invad
 ---
 
 ### A Data-Driven Detective Story
+
 <div style="text-align: justify;">
 We set out to solve this mystery by combining a host of powerful tools. we started by tweaking the antibody’s structure at the molecular level, swapping out specific building blocks (amino acids) to see how these changes affected its behavior. Using X-ray crystallography (MX) detailed snapshots of the antibody’s shape can be captured. MX revealed that when a particular “disulfide crossover” forms and Small-angle X-ray Scattering showed the molecule adopts a compact, less flexible structure.
 </div>
@@ -116,26 +116,24 @@ This data-driven approach is a game changer. By understanding how subtle structu
 - **Interdisciplinary Collaboration**  
   combining biological research expertise with advanced data science methods to deliver actionable insights and robust analytical solutions.
 
-
 ---
 
-## Technical Highlights
+## Insights & Highlights
 
 - **Advanced Biological Data Analysis**  
-    Handling complex biological datasets, integrating multi-modal experimental data (MX,SAXS) and computational modeling.
+   Handling complex biological datasets, integrating multi-modal experimental data (MX,SAXS) and computational modeling.
 
 - **Versatile Data Processing**  
-    Utilized various data analysis techniques, from initial data preprocessing and dimensionality reduction to detailed statistical analysis, ensuring robust and reproducible outcomes.
+   Utilized various data analysis techniques, from initial data preprocessing and dimensionality reduction to detailed statistical analysis, ensuring robust and reproducible outcomes.
 
 - **Data-Driven Structural Modeling**  
-    Transformed static structural images into meaningful conformational distributions using evolutionary algorithms and unsupervised machine learning methods to optimize model selection based on experimental constraints.
+   Transformed static structural images into meaningful conformational distributions using evolutionary algorithms and unsupervised machine learning methods to optimize model selection based on experimental constraints.
 
 - **Scientific Visualization and Interpretation**  
-    Converted complex datasets into intuitive visualizations (3D spherical coordinate plots, color-coded distribution maps) that clearly communicate sophisticated insights, enhancing understanding among diverse audiences.
+   Converted complex datasets into intuitive visualizations (3D spherical coordinate plots, color-coded distribution maps) that clearly communicate sophisticated insights, enhancing understanding among diverse audiences.
 
 - **Computational Simulation & Ensemble Analysis**  
-    Applied molecular dynamics simulations and genetic algorithms to systematically sample structural conformations, validating these against experimental data, thus reinforcing statistical significance and model reliability.
-
+   Applied molecular dynamics simulations and genetic algorithms to systematically sample structural conformations, validating these against experimental data, thus reinforcing statistical significance and model reliability.
 
 ---
 
@@ -145,4 +143,4 @@ Read the full paper on <a class="inline-link" href="https://www.science.org/doi/
 
 ---
 
-*In today’s era of personalized medicine, this research reminds us that even the smallest molecular switches can have enormous consequences. By harnessing the power of data, we are now one step closer to turning the body’s natural defenses into finely tuned instruments for healing.*
+_In today’s era of personalized medicine, this research reminds us that even the smallest molecular switches can have enormous consequences. By harnessing the power of data, we are now one step closer to turning the body’s natural defenses into finely tuned instruments for healing._

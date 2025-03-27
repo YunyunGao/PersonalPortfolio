@@ -93,7 +93,7 @@ The Hyperparameter tuning was conducted using the Hyperband algorithm for optima
 
 ---
 
-## Technical Highlights
+## Insights & Highlights
 
 - **Practical Problem Solving**  
   Demonstrated how machine learning can be applied to a real-world problem by automating the detection of subtle artifacts in complex datasets.

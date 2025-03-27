@@ -132,7 +132,7 @@ this optimized correction results in the "good" electron density distribution mo
 
 ---
 
-## Technical Highlights
+## Insights & Highlights
 
 - **Robust Data Quality Enhancement**  
   Developed a novel metric (CSS) and a self-adaptive background correction method that objectively evaluate and improve the quality of noisy, time-series data.

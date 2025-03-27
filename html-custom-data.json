@@ -1,0 +1,64 @@
+{
+  "version": 1.1,
+  "tags": [
+    {
+      "name": "script",
+      "description": "The script element",
+      "attributes": [
+        {
+          "name": "type",
+          "description": "Type of the script",
+          "values": [
+            "text/javascript",
+            "module",
+            "application/javascript"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "style",
+      "description": "The style element",
+      "attributes": [
+        {
+          "name": "type",
+          "description": "Type of the style",
+          "values": [
+            "text/css"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "link",
+      "description": "The link element",
+      "attributes": [
+        {
+          "name": "rel",
+          "description": "Relationship",
+          "values": [
+            "stylesheet"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "highlight",
+      "description": "Jekyll code highlighting",
+      "attributes": []
+    }
+  ],
+  "globalAttributes": [
+    {
+      "name": "class",
+      "description": "CSS classes",
+      "values": []
+    },
+    {
+      "name": "id",
+      "description": "Unique identifier",
+      "values": []
+    }
+  ],
+  "valueSets": []
+} 

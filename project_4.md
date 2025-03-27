@@ -4,7 +4,7 @@
 <p><a class="inline-link" href="https://github.com/resources/articles/devops/ci-cd" target="_blank">Continuous Integration and Continuous Deployment (CI/CD)</a> isn't just for tech startups anymore. When I joined the initiative, the <a class="inline-link" href="https://github.com/thorn-lab/coronavirus_structural_task_force" target="_blank">Coronavirus Structural Task Force</a>, I believe it was possible to use industry-standard DevOps practices to revolutionize urgent scientific research task.</p>
 
 <p>When the COVID-19 pandemic emerged, structural biologists faced unprecedented urgency to decode the virus's proteins for drug development. This led to rapid structure generation, but also increased risk of errors. To tackle this, I, as the major pipeline developer  and grouped with other scientists, established an automated pipeline remarkably similar to CI/CD workflows familiar in software engineering.</p>
-
+</div>
 
 <div style="display: flex; justify-content: center; margin: 0 0 2rem 0; flex-direction: column; align-items: center;">
     <div style="display: flex; justify-content: center; width: 100%;">
@@ -70,7 +70,7 @@ document.addEventListener('keydown', function(event) {
 
 ---
 
-### Tech Stack Used:
+### Tech Stacks:
 **Containerization & Deployment:**  
 Docker, for encapsulating analysis tools
 
@@ -100,7 +100,7 @@ Check how we manage this on  <a class="inline-link" href="https://www.nature.com
 
 ---
 
-### Technical Highlighted
+### Insights & Highlights
 
 **Rapid Automated Feedback:** Mimicking tech CI/CD principles enables quick error identification and resolution, significantly enhancing data quality.
 

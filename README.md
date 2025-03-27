@@ -8,11 +8,20 @@ Please check back soon for exciting updates.
 Thanks for visiting! 🙌
 
 ---
+
+## 📌 Changelog v0.0.4
+
+- Added project 5
+- Added image popup functionality for better viewing
+- Enhanced figure layouts and captions
+- Improved scientific content presentation
+- Implemented consistent styling across projects
+
 ## 📌 Changelog v0.0.3
-- Added project 4 
+
+- Added project 4
 - Added typed.js for dynamic text animation on homepage
 - Enhanced image hover effects and transitions
-- Improved responsive layout for mobile devices
 - Added detailed figure captions with scientific context
 - Implemented custom CSS for better text readability
 

@@ -51,7 +51,7 @@ I'm a method developer focused on transforming data into actionable insights. I 
 
 ---
 
-
+<a class="inline-link" href="project_5.html"><b>5. Key transition Points Extraction in Dynamic Data</b></a>
 
 ---
 
