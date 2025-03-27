@@ -68,30 +68,30 @@ Utilizing Singular Value Decomposition, I efficiently decomposed complex dataset
 I created the innovative Cumulative First-Ranked Singular-Values Correlation Map (CSV-CORMAP), enabling objective, real-time visualization and precise quantification of dynamic transition points.
 
 **Automated Algorithm Development**  
-The mathematically-driven algorithm automates traditionally subjective analyses, significantly improving accuracy, speed, and reproducibility—an essential feature for scalable, data-driven applications.
-
-&nbsp;
+The model-free algorithm automates traditionally subjective analyses, significantly improving accuracy, speed, and reproducibility—an essential feature for scalable, data-driven applications.
 
 ---
 
 ### Insights & Highlights
 
-Rigorous validation via practical case studies demonstrated clear success in:
+Rigorous validation via practical case studies demonstrated clear success of the <strong>CSV-CORMAP</strong> in:
 
-Rapid Structural Transition Detection: Objectively identified critical, real-time transitions in fast-evolving biological experiments, such as protein dimerization.
+- <a class="inline-link" href="https://journals.iucr.org/m/issues/2018/06/00/mf5027/" target="_blank">Rapid Structural Transition Detection</a>: Objectively identified critical, real-time transitions in fast-evolving biological experiments, such as protein dimerization.
 
-Complex Phase Transition Monitoring: Accurately detected subtle real-time phase transitions in polymer systems, emphasizing the algorithm's robustness and versatility.
+- <a class="inline-link" href="https://pubs.acs.org/doi/full/10.1021/acs.langmuir.9b00728" target="_blank">Complex Phase Transition Monitoring</a>: Accurately detected subtle real-time phase transitions in polymer systems, emphasizing the algorithm's robustness and versatility.
 
-These validations demonstrate my ability to leverage pure mathematics and computational rigor in addressing real-world analytical challenges.
+These validations show information frameworks and model-free algorithms are powerful in addressing real-world analytical challenges before many inference is applied.
 
-Why This Matters for Tech Companies
+---
 
-Bridging advanced mathematical algorithms with real-time data analysis, this work highlights critical skills valued by tech companies:
+### Why Model-Free Method and Deductive Reasoning Matter
 
-Real-time decision-making: Objective, instantaneous extraction of actionable insights from complex datasets.
+**Real-time decision-making:** Objective, instantaneous extraction of actionable insights from complex datasets.
 
-Robust, scalable analytics: Algorithms meticulously crafted for scalability and automation.
+**Robust, scalable analytics:** Algorithms meticulously crafted for scalability and automation.
 
-Mathematical innovation: Developing versatile and purely mathematical analytical tools applicable across industries such as biotechnology, pharmaceuticals, materials science, and beyond.
+**Versatility:** A purely mathematical analytical tools is versatile. As long as the input data can be curated in the required way, the method is applicable across industries such as biotechnology, pharmaceuticals, materials science where on-the-fly decision-making is required.
 
-In essence, these mathematical techniques, proven analytical methodologies, and demonstrated innovative capability position me effectively for impactful roles within dynamic, technology-focused environments.
+---
+
+_In essence, try to use deductive reasoning when reproducibility becomes a concern. Sophisticated methods which require strong prior knowledge can be developed after a robust reference foundation is found._
