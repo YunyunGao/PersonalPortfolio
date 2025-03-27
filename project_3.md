@@ -9,7 +9,7 @@ Imagine a world where our body’s own defenders—antibodies—can be fine-tune
 ### The Challenge of Fine-Tuning Antibodies
 
 <div style="text-align: justify;">
-Antibodies are proteins that help our body identify and neutralize harmful invaders. Among them, the IgG2 class stands out. Unlike its relatives, IgG2 has a unique hinge—a flexible connector that can rearrange its chemical bonds. This ability, known as disulfide shuffling, acts like a molecular switch, controlling how the antibody binds to immune receptors and, in turn, how it activates the immune response. However, for years scientists puzzled over exactly how this tiny hinge could make such a big difference.
+Antibodies are proteins that help our body identify and neutralize harmful invaders. Among them, the IgG2 class stands out. Unlike its relatives, IgG2 has a unique hinge—a flexible connector that can rearrange its chemical bonds. This ability, known as disulfide shuffling, acts like a molecular switch, controlling how the antibody binds to immune receptors and, in turn, how it activates the immune response. However, for years molecular biologists puzzled over exactly how this tiny hinge could make such a big difference.
 </div>
 
 <div style="display: flex; justify-content: center; gap: 20px; margin: 2rem 0;">
