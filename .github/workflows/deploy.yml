@@ -29,8 +29,19 @@ jobs:
         uses: actions/configure-pages@v4
       - name: Install dependencies
         run: bundle install
+      - name: Debug Info
+        run: |
+          echo "Current directory: $(pwd)"
+          echo "Directory contents:"
+          ls -la
+          echo "Jekyll version:"
+          bundle exec jekyll --version
       - name: Build
-        run: bundle exec jekyll build
+        run: bundle exec jekyll build --verbose
+      - name: Check build output
+        run: |
+          echo "Checking _site directory contents:"
+          ls -la _site
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
