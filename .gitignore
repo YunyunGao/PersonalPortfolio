@@ -22,6 +22,8 @@ Thumbs.db
 .Spotlight-V100
 .Trashes
 ehthumbs.db
+Gemfile.lock
+Gemfile
 
 # IDE and editor files
 .idea/

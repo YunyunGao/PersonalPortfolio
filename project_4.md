@@ -27,39 +27,13 @@
     </div>
 </div>
 
-<script>
-function openPopup(imageSrc) {
-    document.getElementById('popupImage').src = imageSrc;
-    document.getElementById('imagePopup').style.display = 'flex';
-    document.body.style.overflow = 'hidden';
-}
-
-function closePopup() {
-    document.getElementById('imagePopup').style.display = 'none';
-    document.body.style.overflow = 'auto';
-}
-
-// Close popup when clicking outside the image
-document.getElementById('imagePopup').addEventListener('click', function(event) {
-    if (event.target === this) {
-        closePopup();
-    }
-});
-
-// Close popup with Escape key
-document.addEventListener('keydown', function(event) {
-    if (event.key === 'Escape') {
-        closePopup();
-    }
-});
-</script>
-
 <p>The whole Coronavirus Structural Task Force project is more than CI/CD. Check our <a class="inline-link" href="https://www.nature.com/articles/s41594-021-00593-7" target="_blank">Nature Molecular & Structural Biology</a> paper.</p>
-</div>
+
 
 ---
 
 ### How the Pipeline Works
+
 **Continuous Integration:** Every Wednesday, new viral protein structures published in the Protein Data Bank (PDB) are automatically integrated into the Task Force's infrastructure.
 
 **Automated Testing & Validation:** Structures undergo rigorous, automated quality checks (using Docker container to host different tools like MolProbity, AUSPEX, XDS, STARANISO), quickly identifying issues such as misalignment and incorrect residue modeling.
@@ -71,6 +45,7 @@ document.addEventListener('keydown', function(event) {
 ---
 
 ### Tech Stacks:
+
 **Containerization & Deployment:**  
 Docker, for encapsulating analysis tools
 
@@ -96,7 +71,7 @@ Web deployment for public accessibility (insidecorona.net)
 Git (version control)\
 Issue tracking and management (GitHub Issues)\
 Real-time communication and collaboration (We are from 8 different time zones!). \
-Check how we manage this on  <a class="inline-link" href="https://www.nature.com/articles/s41594-020-00544-8#Sec6" target="_blank">this feature report on Nature Molecular & Structural Biology</a>.
+Check how we manage this on <a class="inline-link" href="https://www.nature.com/articles/s41594-020-00544-8#Sec6" target="_blank">this feature report on Nature Molecular & Structural Biology</a>.
 
 ---
 
@@ -108,8 +83,7 @@ Check how we manage this on  <a class="inline-link" href="https://www.nature.com
 
 **Iterative Improvement:** Regular cycles of integration, testing, and deployment foster continual enhancement in scientific models.
 
-
-- **What I achieved in the project**: 
+- **What I achieved in the project**:
   - Automation of complex data pipelines
   - Continuous integration tools and methodology
   - Real-time automated quality assurance
@@ -131,6 +105,4 @@ Check how we manage this on  <a class="inline-link" href="https://www.nature.com
 
 For more details about the project, check out the <a class="inline-link" href="https://github.com/thorn-lab/coronavirus_structural_task_force">CSTF on Github</a>.
 
-
-*By embracing tech-inspired CI/CD workflows, the Coronavirus Structural Task Force not only improves scientific outcomes but also illustrates how software engineering practices can significantly impact scientific innovation. This cross-pollination of skills is a valuable lesson for tech companies looking to innovate in scientific or data-intensive environments.*
-
+_By embracing tech-inspired CI/CD workflows, the Coronavirus Structural Task Force not only improves scientific outcomes but also illustrates how software engineering practices can significantly impact scientific innovation. This cross-pollination of skills is a valuable lesson for tech companies looking to innovate in scientific or data-intensive environments._

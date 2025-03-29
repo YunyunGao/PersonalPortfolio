@@ -8,6 +8,12 @@ Please check back soon for exciting updates.
 Thanks for visiting! 🙌
 
 ---
+## 📌 Changelog v0.0.5
+- Added project 6
+- Enhanced interactive elements with SVG animations
+- Added hover effects for data visualization
+- Improved code documentation and examples
+
 
 ## 📌 Changelog v0.0.4
 
