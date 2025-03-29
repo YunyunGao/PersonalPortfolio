@@ -100,7 +100,7 @@ To encapsulate the IMP, I employed a convex hull algorithm, effectively capturin
 </div>
 <div style="display: flex; justify-content: center; margin: 2rem 0;">
   <figure style="margin: 0;">
-    <img src="images/hull.gif" alt="reality" style="width: 80%; object-fit: cover; object-position: center  50% 50%;">
+    <img src="images/hull.gif" alt="reality" style="width: 60%; object-fit: cover; object-position: center  50% 50%;">
     <figcaption style="text-align: center; margin-top: 0.5rem;">
     The IMP envelope constructed based on the convex hulls of the three regions.
     Overall the convex hulls form a concave shape.
@@ -142,21 +142,7 @@ The <a class="inline-link" href="https://en.wikipedia.org/wiki/SIMD" target="_bl
 <div style="text-align: justify; overflow-wrap: break-word; hyphens: auto;">
 Adapting a coarse-grained approach to simulate the detergent corona, which drastically simplified computations without sacrificing accuracy. An SO(3) grid facilitated systematic sampling of possible orientations, enhancing the thoroughness and reliability of the model optimization. Check out the <a class="inline-link" href="https://github.com/YunyunGao/DETPROT/blob/master/Sampler.py" target="_blank">orientation sampling code</a> for more details.
 </div>
-
-<div style="display: flex; justify-content: center; margin: 0 0 2rem 0; flex-direction: column; align-items: center;">
-    <div style="display: flex; justify-content: center; width: 100%; gap: 1rem;">
-        <figure style="flex: 1; margin: 0; height: 0; padding-bottom: 38%; position: relative;">
-            <img src="images/pdc_all_atoms.jpg" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain;">
-        </figure>
-        <figure style="flex: 1; margin: 0; height: 0; padding-bottom: 38%; position: relative;">
-            <img src="images/pdc_pa.jpg" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain;">
-        </figure>
-    </div>
-    <figcaption style="text-align: center; margin-top: 0.5rem;">
-    <p>The first figure shows a detailed, all-atom model. Every atom of the protein and each detergent molecule is represented explicitly. while a fully atomistic approach is great to have physical detail, it can become prohibitively expensive and still may not exhaustively sample all relevant conformations within feasible compute time. <strong>This is non-ideal for machine learning practice.</strong></p>
-    <p>By contrast, in a coarse-grained representation, pseudo atoms are used to represent the detergent molecules. This approach is far more efficient to compute, so it can more quickly produce a model that fits experimental data, <strong>ideal for machine learning practice.</strong> But there is <strong>a critical caveat</strong>: but the final model may not always reflect the underlying biochemistry of the protein–detergent system. The second figure shows a clear false-positive. Physically, the protein placement is not entirely correct as the hydrophobic region (grey) is not properly wrapped by the detergent corona.</p>
-    </figcaption>
-</div>
+<br>
 
 ---
 
