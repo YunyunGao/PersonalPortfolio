@@ -61,3 +61,5 @@ I'm a method developer focused on transforming data into actionable insights. I 
 <img src="images/hull.gif?raw=true"  style="width: 45%; padding-left: 25%; margin-top: 1rem;"/>
 
 ---
+
+_The site is still under construction, check <a class="inline-link" href="README.md">README.md</a> for progress._
