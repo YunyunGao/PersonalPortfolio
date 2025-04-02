@@ -1,0 +1,311 @@
+/* General Styles */
+:root {
+    --primary-color: #4361ee;
+    --secondary-color: #3f37c9;
+    --light-color: #f8f9fa;
+    --dark-color: #212529;
+    --success-color: #4caf50;
+    --danger-color: #f44336;
+    --gray-color: #6c757d;
+    --border-radius: 8px;
+    --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    --transition: all 0.3s ease;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f5f7fa;
+    color: var(--dark-color);
+    line-height: 1.6;
+}
+
+/* Demo Container */
+.demo-container {
+    max-width: 600px;
+    margin: 100px auto;
+    text-align: center;
+    padding: 30px;
+    background-color: white;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+}
+
+.open-button {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: var(--border-radius);
+    font-size: 16px;
+    cursor: pointer;
+    transition: var(--transition);
+    font-weight: 500;
+}
+
+.open-button:hover {
+    background-color: var(--secondary-color);
+    transform: translateY(-2px);
+}
+
+/* Popup Container */
+.popup-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    backdrop-filter: blur(5px);
+}
+
+.popup-container.active {
+    display: flex;
+}
+
+.popup-content {
+    background-color: white;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    width: 90%;
+    max-width: 1200px;
+    height: 85vh;
+    max-height: 800px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    animation: popupFade 0.3s ease;
+}
+
+@keyframes popupFade {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+/* Popup Header */
+.popup-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    border-bottom: 1px solid #eee;
+}
+
+.popup-header h2 {
+    margin: 0;
+    font-weight: 500;
+    color: var(--dark-color);
+}
+
+.close-button {
+    background: none;
+    border: none;
+    font-size: 20px;
+    color: var(--gray-color);
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.close-button:hover {
+    color: var(--danger-color);
+}
+
+/* Editor Layout */
+.editor-layout {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+}
+
+/* Canvas Container */
+.canvas-container {
+    flex: 1;
+    padding: 20px;
+    overflow: hidden;
+    background-color: var(--light-color);
+    position: relative;
+}
+
+canvas {
+    border: 1px solid #ddd;
+    background-color: white;
+    box-shadow: var(--box-shadow);
+}
+
+/* Controls Container */
+.controls-container {
+    width: 280px;
+    padding: 20px;
+    background-color: white;
+    border-left: 1px solid #eee;
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    overflow-y: auto;
+}
+
+/* Drawing Controls */
+.drawing-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.control-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 15px;
+    background-color: var(--light-color);
+    color: var(--dark-color);
+    border: 1px solid #ddd;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    transition: var(--transition);
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.control-button:hover {
+    background-color: #f0f0f0;
+}
+
+#drawMask {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+}
+
+#drawMask:hover {
+    background-color: var(--secondary-color);
+}
+
+#clearAll {
+    background-color: white;
+    color: var(--danger-color);
+    border: 1px solid var(--danger-color);
+}
+
+#clearAll:hover {
+    background-color: var(--danger-color);
+    color: white;
+}
+
+/* Image Controls */
+.image-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.image-controls h3 {
+    margin: 0 0 10px 0;
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--dark-color);
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.slider-control {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.slider-control label {
+    font-size: 14px;
+    color: var(--gray-color);
+    font-weight: 500;
+}
+
+.slider-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+input[type="range"] {
+    flex: 1;
+    -webkit-appearance: none;
+    height: 4px;
+    background-color: #ddd;
+    border-radius: 2px;
+    outline: none;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 16px;
+    height: 16px;
+    background-color: var(--primary-color);
+    border-radius: 50%;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+input[type="range"]::-webkit-slider-thumb:hover {
+    background-color: var(--secondary-color);
+    transform: scale(1.1);
+}
+
+.value-display {
+    min-width: 40px;
+    text-align: center;
+    padding: 3px 5px;
+    background-color: var(--light-color);
+    border-radius: 4px;
+    font-size: 12px;
+    font-family: monospace;
+    color: var(--dark-color);
+}
+
+/* Tips Section */
+.tips-section {
+    padding-top: 15px;
+    border-top: 1px solid #eee;
+}
+
+.tips-section h3 {
+    margin: 0 0 10px 0;
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--dark-color);
+}
+
+.tips-section ul {
+    margin: 0;
+    padding-left: 20px;
+}
+
+.tips-section li {
+    font-size: 14px;
+    margin-bottom: 8px;
+    color: var(--gray-color);
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+    .popup-content {
+        width: 95%;
+        height: 90vh;
+    }
+}
+
+@media (max-width: 768px) {
+    .editor-layout {
+        flex-direction: column;
+    }
+    
+    .controls-container {
+        width: 100%;
+        border-left: none;
+        border-top: 1px solid #eee;
+    }
+} 
