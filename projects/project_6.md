@@ -11,10 +11,10 @@
 <div style="display: flex; justify-content: center; margin: 0 0 2rem 0; flex-direction: column; align-items: center;">
     <div style="display: flex; justify-content: center; width: 100%; gap: 1rem;">
         <figure style="flex: 1; margin: 0; height: 0; padding-bottom: 38%; position: relative;">
-            <img src="images/pdc_all_atoms.jpg" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain;">
+            <img src="/images/pdc_all_atoms.jpg" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain;">
         </figure>
         <figure style="flex: 1; margin: 0; height: 0; padding-bottom: 38%; position: relative;">
-            <img src="images/pdc_pa.jpg" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain;">
+            <img src="/images/pdc_pa.jpg" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain;">
         </figure>
     </div>
     <figcaption style="text-align: center; margin-top: 0.5rem;">
@@ -33,7 +33,7 @@ To address the complexity effectively, I abstracted the original challenge into 
 
 <div style="display: flex; justify-content: center;  margin: 1rem 0;">
   <figure style="margin: 0;">
-    <img src="images/pdc_pre.jpg" alt="reality" style="width: 50%; object-fit: cover; object-position: center  50% 50%;">
+    <img src="/images/pdc_pre.jpg" alt="reality" style="width: 50%; object-fit: cover; object-position: center  50% 50%;">
   </figure>
 </div>
 <div style="text-align: center;">
@@ -45,7 +45,7 @@ Geometry analysis and hydrophobic boundaries generation.
 
 <div style="display: flex; justify-content: center; margin: 1rem 0;">
   <figure style="margin: 0;">
-    <img src="images/pdc_envlope.jpg" alt="reality" style="width: 50%; object-fit: cover; object-position: center  50% 50%;">
+    <img src="/images/pdc_envlope.jpg" alt="reality" style="width: 50%; object-fit: cover; object-position: center  50% 50%;">
   </figure>
 </div>
 <div style="text-align: center;">
@@ -57,7 +57,7 @@ Determining the effective volume of the <a class="inline-link" href="https://en.
 
 <div style="display: flex; justify-content: center; margin: 1rem 0;">
   <figure style="margin: 0;">
-    <img src="images/pdc_pluecker.jpg" alt="reality" style="width: 90%; object-fit: cover; object-position: center  50% 50%;">
+    <img src="/images/pdc_pluecker.jpg" alt="reality" style="width: 90%; object-fit: cover; object-position: center  50% 50%;">
   </figure>
 </div>
 <div style="text-align: center;">        
@@ -69,7 +69,7 @@ Efficiently deciding if a point (pseudo detergent molecule) is within the define
 
 <div style="display: flex; justify-content: center; margin: 1rem 0;">
   <figure style="margin: 0;">
-    <img src="images/pdc_corona.jpg" alt="reality" style="width: 80%; object-fit: cover; object-position: center  50% 50%;">
+      <img src="/images/pdc_corona.jpg" alt="reality" style="width: 80%; object-fit: cover; object-position: center  50% 50%;">
   </figure>
 </div>
 <div style="text-align: center;">
@@ -81,7 +81,7 @@ Forming a flexible representation of the detergent layer surrounding the protein
 
 <div style="display: flex; justify-content: center;margin: 1rem 0;">
   <figure style="margin: 0;">
-    <img src="images/pdc_so3.jpg" alt="reality" style="width: 100%; object-fit: cover; object-position: center  50% 50%;">
+    <img src="/images/pdc_so3.jpg" alt="reality" style="width: 100%; object-fit: cover; object-position: center  50% 50%;">
   </figure>
 </div>
 <div style="text-align: center; ">    
@@ -100,7 +100,7 @@ To encapsulate the IMP, I employed a convex hull algorithm, effectively capturin
 </div>
 <div style="display: flex; justify-content: center; margin: 2rem 0;">
   <figure style="margin: 0;">
-    <img src="images/hull.gif" alt="reality" style="width: 60%; object-fit: cover; object-position: center  50% 50%;">
+    <img src="/images/hull.gif" alt="reality" style="width: 60%; object-fit: cover; object-position: center  50% 50%;">
     <figcaption style="text-align: center; margin-top: 0.5rem;">
     The IMP envelope constructed based on the convex hulls of the three regions.
     Overall the convex hulls form a concave shape.
@@ -116,7 +116,7 @@ Determining whether individual detergent molecules belonged to the protein compl
 
 <div style="display: flex; justify-content: center; margin: 1rem 0;">
   <figure style="margin: 0; position: relative;">
-    <img src="images/pdc_ray-intersect.png" alt="reality" style="width: 50%; object-fit: cover; object-position: center  50% 50%;">
+    <img src="/images/pdc_ray-intersect.png" alt="reality" style="width: 50%; object-fit: cover; object-position: center  50% 50%;">
     <svg style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none;">
       <!-- Red dot highlight -->
       <circle class="highlight-circle" cx="32%" cy="48%" r="8" fill="none" stroke="red" stroke-width="2" opacity="0" style="transition: opacity 0.3s ease;">
@@ -153,7 +153,7 @@ Adapting a coarse-grained approach to simulate the detergent corona, which drast
 </div>
 <div style="display: flex; justify-content: center; margin: 2rem 0;">
   <figure style="margin: 0;">
-    <img src="images/pdc_results.png" alt="reality" style="width: 100%; object-fit: cover; object-position: center  50% 50%;">
+    <img src="/images/pdc_results.png" alt="reality" style="width: 100%; object-fit: cover; object-position: center  50% 50%;">
     <figcaption style="text-align: center; margin-top: 0.5rem;">
     (Left) Example of the best-fitted PDC model for the outward-facing Mhp1 (PDB code: 2jln)
     and a DDM corona with an elliptic capsule-like shape. The shell layer and core layer are

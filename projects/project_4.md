@@ -9,10 +9,10 @@
 <div style="display: flex; justify-content: center; margin: 0 0 2rem 0; flex-direction: column; align-items: center;">
     <div style="display: flex; justify-content: center; width: 100%;">
         <figure class="image-container">
-            <img src="images/cstf_feature2.png" style="width: 100%; height: auto;" onclick="openPopup('images/cstf_feature2.png')">
+            <img src="/images/cstf_feature2.png" style="width: 100%; height: auto;" onclick="openPopup('/images/cstf_feature2.png')">
         </figure>
         <figure class="image-container">
-            <img src="images/cstf_feature1.png" style="width: 100%; height: auto;" onclick="openPopup('images/cstf_feature1.png')">
+            <img src="/images/cstf_feature1.png" style="width: 100%; height: auto;" onclick="openPopup('/images/cstf_feature1.png')">
         </figure>
     </div>
     <figcaption style="text-align: center; margin-top: 0.5rem;">
@@ -92,7 +92,7 @@ Check how we manage this on <a class="inline-link" href="https://www.nature.com/
 
 <div style="display: flex; justify-content: center; margin: 0 0; ">
     <figure>
-        <img src="images/cstf_top_contirb.jpg" style="width: 80%; height: auto;">
+        <img src="/images/cstf_top_contirb.jpg" style="width: 80%; height: auto;">
         <figcaption style="text-align: center; margin-top: 0.5rem;">
         Top contributor of Corona Structure Task Force
         </figcaption>

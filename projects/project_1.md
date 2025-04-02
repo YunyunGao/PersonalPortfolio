@@ -5,11 +5,11 @@
 **Result Showcasing:**
 <div style="display: flex; justify-content: center; gap: 20px; margin: 2rem 0;">
   <figure style="margin: 0;">
-    <img src="images/denss_bad.webp" alt="gif bad" style="width: 320px; height: 250px; object-fit: cover; object-position: center  50% 50%;">
+    <img src="/images/denss_bad.webp" alt="gif bad" style="width: 320px; height: 250px; object-fit: cover; object-position: center  50% 50%;">
     <figcaption style="text-align: center; margin-top: 0.5rem;">Result with Bad Data</figcaption>
   </figure>
   <figure style="margin: 0;">
-    <img src="images/denss_good.gif" alt="gif good" style="width: 320px; height: 250px; object-fit: cover; object-position: 50% 30%;">
+    <img src="/images/denss_good.gif" alt="gif good" style="width: 320px; height: 250px; object-fit: cover; object-position: 50% 30%;">
     <figcaption style="text-align: center; margin-top: 0.5rem;">Result with Good Data</figcaption>
   </figure>
 </div>
@@ -40,7 +40,7 @@ biological particles under study. When sample is delivered through a SEC coumn, 
 
 <div style="display: flex; justify-content: center; gap: 20px; margin: 2rem 0;">
   <figure style="margin: 0;">
-    <img src="images/sec_saxs.png" alt="sec saxs" style="width: 100%; object-fit: cover; object-position: center  50% 50%;">
+    <img src="/images/sec_saxs.png" alt="sec saxs" style="width: 100%; object-fit: cover; object-position: center  50% 50%;">
     <figcaption>
       Dataset from <a class="inline-link" href="https://pmc.ncbi.nlm.nih.gov/articles/PMC6276278/">SEC-SAXS</a> are 2D time series (technically 3D, but azimuthal integration can be used to reduce the dimensionality). The sample is delivered to the X-ray beam using an HPLC system, and when the sample reaches the beam, the response appears at a predefined <a class="inline-link" href="https://pmc.ncbi.nlm.nih.gov/articles/PMC4420545/">Shannon channel</a> (or wave vector bin). Under ideal conditions, the time series at all Shannon channels resemble Gaussian distributions. Given the observed signal (I<sub>s+b</sub>), the background (I<sub>b</sub>) can be easily inferred.
     </figcaption>
@@ -55,7 +55,7 @@ However, in reality, ideal conditions do not exist. In actual experiments, vario
 </div>
 <div style="display: flex; justify-content: center; gap: 20px; margin: 1rem 0;">
   <figure style="margin: 0;">
-    <img src="images/sec_saxs_reality.webp" alt="reality" style="width: 100%; object-fit: cover; object-position: center  50% 50%;">
+    <img src="/images/sec_saxs_reality.webp" alt="reality" style="width: 100%; object-fit: cover; object-position: center  50% 50%;">
     <figcaption>
       This is the actual dataset. I don't even know where the protein peak is. Image the protein signal is a series of A and the background is a series of C. Many factors can affect the accurate evaluation of A series and C series.
     </figcaption>
@@ -71,7 +71,7 @@ However, in reality, ideal conditions do not exist. In actual experiments, vario
 
 <div style="display: flex; justify-content: center; gap: 20px; margin: 1rem 0; width: 110%;">
   <figure style="margin: 0;">
-      <img src="images/sec_uv_saxs.png" alt="sec-uv-saxs" style="width: 100%; height: auto; object-fit: cover; clip-path: inset(0% 10% 0% 0%); transform: translateX(1%); /* Shift left to center the visible portion */">
+      <img src="/images/sec_uv_saxs.png" alt="sec-uv-saxs" style="width: 100%; height: auto; object-fit: cover; clip-path: inset(0% 10% 0% 0%); transform: translateX(1%); /* Shift left to center the visible portion */">
     <figcaption>
       The figure shows the configuration of the SEC-UV-SAXS system and the corresponding data. Here the UV absorbance at 280nm serves as a robust reference time series because UV light is much less intrusive to proteins than X-ray. UV absorbance is proportional to the protein molar concentration. In solution SAXS, the signal from protein alone (I<sub>s</sub>) is also propotional to the protein molar concentration under dilute solution condition condition.
     </figcaption>
@@ -87,7 +87,7 @@ After constructing the fidelity estimator correctness-state score (CSS), a simil
 
 <div style="display: flex; justify-content: center; gap: 20px; margin: 1rem 0;">
   <figure style="margin: 0; width: 60%;">
-      <img src="images/score_shannon.webp?raw=true" alt="score" style="width: 100%; height: auto; object-fit: cover;">
+      <img src="/images/score_shannon.webp?raw=true" alt="score" style="width: 100%; height: auto; object-fit: cover;">
     <figcaption style="width: 190%; transform: translateX(-20%);">
       The top row shows the results obtained using the machine learning approach. The scattering signals in the region of interest are kept stable across all Shannon channels. The quality of the manifested time series remains above the baseline. The bottom two rows show the results using the traditional buffer background correction approach.     
     </figcaption>
@@ -96,11 +96,11 @@ After constructing the fidelity estimator correctness-state score (CSS), a simil
 
 <div style="display: flex; justify-content: center; gap: 20px; margin: 2rem 0;">
   <figure style="margin: 0;">
-    <img src="images/tim_original.png" alt="time series bad" style="width: 100%; height: auto; object-fit: cover;">
+    <img src="/images/tim_original.png" alt="time series bad" style="width: 100%; height: auto; object-fit: cover;">
     <figcaption style="text-align: center; margin-top: 0.5rem;">Standard "Badly" Corrected Data</figcaption>
   </figure>
   <figure style="margin: 0;">
-    <img src="images/tim_corrected.png" alt="time series good" style="width: 100%; height: auto; object-fit: cover;">
+    <img src="/images/tim_corrected.png" alt="time series good" style="width: 100%; height: auto; object-fit: cover;">
     <figcaption style="text-align: center; margin-top: 0.5rem;">Predicted Optimally Corrected Data</figcaption>
   </figure>
 </div>

@@ -7,6 +7,9 @@ _site/
 # Files containing 'test' in their names
 *[Tt]est*
 
+# Files fed to cursor 
+cursor_files/
+
 # Bundler dependencies
 vendor/
 .bundle/
@@ -21,9 +24,12 @@ Thumbs.db
 ._*
 .Spotlight-V100
 .Trashes
+
+# Config files
 ehthumbs.db
 Gemfile.lock
 Gemfile
+PROTOCOL.md
 
 # IDE and editor files
 .idea/

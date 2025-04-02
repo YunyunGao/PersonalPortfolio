@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Polygon Editor</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.1/fabric.min.js"></script>
+    <link rel="stylesheet" href="polygon-editor.css">
+</head>
+<body>
+    <div class="container">
+        <div class="canvas-container">
+            <canvas id="canvas"></canvas>
+        </div>
+        <div class="controls">
+            <button id="drawMask">Draw Mask</button>
+            <button id="clearAll">Clear All Polygons</button>
+
+            <!-- Image Adjustment Controls -->
+            <div class="image-controls">
+                <div class="slider-control">
+                    <label for="brightnessSlider">Brightness:</label>
+                    <input type="range" id="brightnessSlider" min="-1" max="1" step="0.01" value="0">
+                    <span id="brightnessValue" class="value-display">0.00</span>
+                </div>
+                <div class="slider-control">
+                    <label for="contrastSlider">Contrast:</label>
+                    <input type="range" id="contrastSlider" min="-1" max="1" step="0.01" value="0">
+                    <span id="contrastValue" class="value-display">0.00</span>
+                </div>
+                <div class="slider-control">
+                    <label for="gammaSlider">Gamma:</label>
+                    <input type="range" id="gammaSlider" min="0.1" max="2.2" step="0.01" value="1">
+                    <span id="gammaValue" class="value-display">1.00</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="polygon-editor.js"></script>
+</body>
+</html> 

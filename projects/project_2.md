@@ -24,7 +24,7 @@ Datasets were annotated from established repositories and scientific collaborati
 
 <div style="display: flex; justify-content: center; gap: 20px; margin: 2rem 0;">
   <figure style="margin: 0; width: 100%;">
-      <img src="images/helcaraxe_data_curation.jpg?raw=true" alt="" style="width: 100%; height: auto; object-fit: cover;">
+      <img src="/images/helcaraxe_data_curation.jpg?raw=true" alt="" style="width: 100%; height: auto; object-fit: cover;">
     <figcaption style="width: 100%;">
       Diffraction data converted into 2D histograms representing intensity versus resolution ranges. Histograms are normalized using TensorFlow's per-image standardization. This ensures a consistent input format for the neural network.
     </figcaption>
@@ -45,7 +45,7 @@ architectures like <a class="inline-link" href="https://papers.nips.cc/paper_fil
 
 <div style="display: flex; justify-content: center; gap: 20px; margin: 2rem 0;">
   <figure style="margin: 0; width: 100%;">
-      <img src="images/helcaraxe_cnn.JPG?raw=true" alt="" style="width: 100%; height: auto; object-fit: cover;">
+      <img src="/images/helcaraxe_cnn.JPG?raw=true" alt="" style="width: 100%; height: auto; object-fit: cover;">
     <figcaption style="width: 100%;">
       A schematic of the network architecture is presented where input dimensions are shown vertically, the convolutional filter sizes are depicted horizontally, and the dense layers display the number of units.
     </figcaption>
@@ -65,7 +65,7 @@ The Hyperparameter tuning was conducted using the Hyperband algorithm for optima
 
 <div style="display: flex; justify-content: center; gap: 20px; margin: 2rem 0;">
   <figure style="margin: 0; width: 100%; display: flex; flex-direction: column; align-items: center;">
-      <img src="images/helcaraxe_smoothgrad.jpg?raw=true" alt="" style="width: 50%; height: auto; object-fit: cover;">
+      <img src="/images/helcaraxe_smoothgrad.jpg?raw=true" alt="" style="width: 50%; height: auto; object-fit: cover;">
     <figcaption style="width: 70%;">
       <a class="inline-link" href="https://arxiv.org/abs/1706.03825">SmoothGrad</a> feature importance mask indicates that brighter pixels correspond to a higher relevance in the model's decision-making process. It is observed that the pixels at the bottom exhibit greater significance compared to those at the top or along the edges.
     </figcaption>

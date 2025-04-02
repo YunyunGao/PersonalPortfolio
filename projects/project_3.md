@@ -14,11 +14,11 @@ Antibodies are proteins that help our body identify and neutralize harmful invad
 
 <div style="display: flex; justify-content: center; gap: 20px; margin: 2rem 0;">
   <figure style="margin: 0;">
-    <img src="images/fab_flexible.gif" alt="fab2 flexible" style="width: 100%; height: auto; object-fit: cover;">
+    <img src="/images/fab_flexible.gif" alt="fab2 flexible" style="width: 100%; height: auto; object-fit: cover;">
     <figcaption style="text-align: center; margin-top: 0.5rem;">A F(ab)<sub>2</sub> fragment of IgG2. Each pair of cyan beads are connected by a hinge bond</figcaption>
   </figure>
   <figure style="margin: 0;">
-    <img src="images/fab_wag.gif" alt="fab2 wag" style="width: 100%; height: 186px; object-fit: contain; clip-path: inset(0% 5% 0% 0%);">
+    <img src="/images/fab_wag.gif" alt="fab2 wag" style="width: 100%; height: 186px; object-fit: contain; clip-path: inset(0% 5% 0% 0%);">
     <figcaption style="text-align: center; margin-top: 0.5rem;">"Wagging" mode of disulfide shuffling</figcaption>
   </figure>
 </div>
@@ -33,14 +33,14 @@ We set out to solve this mystery by combining a host of powerful tools. we start
 
 <div style="display: flex; justify-content: center; gap: 20px; margin: 2rem 0;">
   <figure style="margin: 0;">
-    <img src="images/fab_compact.png" alt="fab2 mx compact" style="width: 100%; height: auto; object-fit: cover;">
+    <img src="/images/fab_compact.png" alt="fab2 mx compact" style="width: 100%; height: auto; object-fit: cover;">
     <figcaption style="margin-top: 0.5rem;">Ribbon representation of F(ab)<sub>2</sub> structure determined with detailed inset view. The proposed disulfide pattern shows that a disulfide crossover forms between two antibody chains. This unique disulfide arrangement result in that the antibody to adopt a more compact conformation.</figcaption>
   </figure>
 </div>
 
 <div style="display: flex; justify-content: center; gap: 20px; margin: 2rem 0;">
   <figure style="margin: 0;">
-    <img src="images/fab_flexible.png" alt="fab2 mx flexible" style="width: 100%; height: auto; object-fit: cover;">
+    <img src="/images/fab_flexible.png" alt="fab2 mx flexible" style="width: 100%; height: auto; object-fit: cover;">
     <figcaption style="margin-top: 0.5rem;">Ribbon representation of F(ab)<sub>2</sub> structure determined  with detailed inset view. The proposed disulfide pattern shows only "paired ladders" form within hinge region. This structure tends to be more flexible.</figcaption>
   </figure>
 </div>
@@ -51,21 +51,21 @@ But the story didn’t stop there. I used rigid-body model to create thousands o
 
 <div style="display: flex; justify-content: center; gap: 20px; margin: 2rem 0;">
   <figure style="margin: 0;">
-    <img src="images/fab_one_cycle.webp" alt="evolution one cycle" style="width: 100%; height: auto; object-fit: cover;">
+    <img src="/images/fab_one_cycle.webp" alt="evolution one cycle" style="width: 100%; height: auto; object-fit: cover;">
     <figcaption style="overflow-wrap: break-word; hyphens: auto; margin-top: 0.5rem;">Specific offspring are selected based on their ability to fit experimental data, guiding the next generation of models. This evolutionary algorithm exemplifies an unsupervised machine learning approach, optimizing structures without explicit human intervention.</figcaption>
   </figure>
   <figure style="margin: 0;">
-    <img src="images/fab_multi_cycle.webp" alt="evolution multi cycle" style="width: 100%; height: auto; object-fit: cover;">
+    <img src="/images/fab_multi_cycle.webp" alt="evolution multi cycle" style="width: 100%; height: auto; object-fit: cover;">
     <figcaption style="overflow-wrap: break-word; hyphens: auto; margin-top: 0.5rem;">Multiple recycles with various seeds allow the reinforcement of statistical significance. This data-driven optimization reinforces the reliability of the predictions. The population distribution at the end of the modeling expresses the best fitted subensembles.</figcaption>
   </figure>
 </div>
 
 <div style="display: flex; justify-content: center; margin: 1rem 0;">
   <figure style="margin: 0;">
-    <img src="images/A_form.webp" alt="evolution one cycle" style="width: 100%; height: auto; object-fit: cover;">
+    <img src="/images/A_form.webp" alt="evolution one cycle" style="width: 100%; height: auto; object-fit: cover;">
   </figure>
   <figure style="margin: 0;">
-    <img src="images/B_form.webp" alt="evolution multi cycle" style="width: 100%; height: auto; object-fit: contain; clip-path: inset(0% 5% 0% 0%);">
+    <img src="/images/B_form.webp" alt="evolution multi cycle" style="width: 100%; height: auto; object-fit: contain; clip-path: inset(0% 5% 0% 0%);">
   </figure>
 </div>
 <figcaption style="overflow-wrap: break-word; hyphens: auto; margin-top: 0rem;">Orientation of F(ab)<sub>2</sub> arms for optimized ensembles in the flexible A-form (left) and compact B-form (right).
@@ -74,7 +74,7 @@ The orientations are plotted using spherical coordinates, where the vertical (z)
 
 <div style="display: flex; justify-content: center; gap: 20px; margin: 2rem 0;">
   <figure style="margin: 0;">
-    <img src="images/fab_all.jpg" alt="fab2 all" style="width: 100%; height: auto; object-fit: cover;">
+    <img src="/images/fab_all.jpg" alt="fab2 all" style="width: 100%; height: auto; object-fit: cover;">
     <figcaption style="margin-top: 0.5rem;">Full scope on the conformational states of F(ab)<sub>2</sub> fragments revealed by data-driven optimization. (A) Distribution of structures for all variants plotted against their calculated Rg values, where the initial conformational pool is shown in gray, and the results manifested from the evolution algorithm is shown in color; increasing
 agonistic activity from red to blue (B) Agreement of the calculated scattering curve from the reweighted ensemble with experimental SAXS data (gray dots) as indicated by &#967;<sup>2</sup> fit; the error-weighted residual plot below. (C) Representative conformational states are shown with one of the F(ab) arms aligned (gray) and the second F(ab) arm colored; color saturation indicates contribution to the ensemble.
     </figcaption>
