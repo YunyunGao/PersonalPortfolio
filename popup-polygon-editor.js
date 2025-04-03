@@ -51,25 +51,20 @@ function closeEditor() {
 function initializeCanvas() {
     const canvasContainer = document.querySelector('.canvas-container');
     if (!canvasContainer) {
-        log('ERROR: Canvas container not found!');
+        console.error('ERROR: Canvas container not found!');
         return;
     }
-    log('Canvas container found:', canvasContainer);
     const containerWidth = canvasContainer.clientWidth;
     const containerHeight = canvasContainer.clientHeight;
-    log(`Canvas container dimensions: ${containerWidth}x${containerHeight}`);
     
-    const padding = 40; 
-    const availableWidth = containerWidth - padding;
-    const availableHeight = containerHeight - padding;
-    log(`Available dimensions after padding: ${availableWidth}x${availableHeight}`);
+    const availableWidth = containerWidth;
+    const availableHeight = containerHeight;
 
     const canvasWidth = Math.min(800, availableWidth);
     const canvasHeight = Math.min(690, availableHeight);
-    log(`Calculated canvas dimensions: ${canvasWidth}x${canvasHeight}`);
 
     if (canvasWidth <= 0 || canvasHeight <= 0) {
-        log('ERROR: Calculated canvas dimensions are invalid.');
+        console.error('ERROR: Calculated canvas dimensions are invalid.');
         return;
     }
 
@@ -79,176 +74,106 @@ function initializeCanvas() {
         selection: false,
         objectCaching: false,
         renderOnAddRemove: false,
-        // backgroundColor: 'lightgrey'
     });
-    log(`Fabric canvas initialized ${canvas.width}x${canvas.height} (Interactive)`);
 
-    // --- Center Fabric's container manually ---
-    if (canvas.wrapperEl) {
-        log('Applying manual centering styles to canvas.wrapperEl');
-        const wrapper = canvas.wrapperEl;
-        wrapper.style.position = 'absolute';
-        wrapper.style.left = '50%';
-        wrapper.style.top = '50%';
-        wrapper.style.transform = 'translate(-50%, -50%)';
-
-        // --- Force dimension recalculation and initial render ---
-        log('Forcing dimension recalculation and initial render');
-        canvas.setDimensions({ width: canvasWidth, height: canvasHeight });
-        canvas.calcOffset();
-        canvas.renderAll();
-        log('Initial render after centering complete.');
-        // --- End force render ---
-
-        // --- Explicitly set upper canvas background --- 
-        if (canvas.upperCanvasEl) {
-            log('Explicitly setting upperCanvasEl background to transparent.');
-            canvas.upperCanvasEl.style.backgroundColor = 'transparent'; // This is extremely important for popup environment.
-        } else {
-            log('Warning: upperCanvasEl not found after centering.');
-        }
-        // --- End set background ---
-
+    // Keep this fix
+    if (canvas.upperCanvasEl) {
+        canvas.upperCanvasEl.style.backgroundColor = 'transparent'; // This is extremely important for popup environment.
     } else {
-        log('Warning: canvas.wrapperEl not found immediately after initialization.');
+        console.warn('Warning: upperCanvasEl not found after centering.');
     }
-    // --- End centering ---
-    
-    // --- Remove Test Rectangle --- 
-    /*
-    try {
-        const rect = new fabric.Rect(...);
-        canvas.add(rect);
-        log('Test rectangle added to canvas.');
-        setTimeout(() => {
-            log('Attempting initial render with test rectangle.');
-            canvas.renderAll(); 
-            canvas.calcOffset();
-            log('Initial render complete.');
-        }, 50);
-    } catch (e) {
-        log('ERROR adding test rectangle:', e);
-    }
-    */
-    // --- End Remove Test ---
     
     // --- Re-enable functionality --- 
-    loadBackgroundImage(); // Re-enable image loading (using fromURL method)
-    setupCanvasEventListeners(); // Re-enable button listeners
-    setupCanvasDrawingHandlers(); // Re-enable core drawing handlers
-    setupImageControlListeners(); // Re-enable slider listeners
+    loadBackgroundImage();
+    setupCanvasEventListeners();
+    setupCanvasDrawingHandlers();
+    setupImageControlListeners();
     // --- End Re-enable --- 
     
     // Initialize global mouse handlers for out-of-browser events
     if (typeof setupGlobalMouseHandlers === 'function') {
         setTimeout(() => {
             setupGlobalMouseHandlers();
-            log('Global mouse handlers initialized for out-of-browser events');
         }, 100);
     } else {
-        log('Warning: setupGlobalMouseHandlers function not found');
+        console.warn('Warning: setupGlobalMouseHandlers function not found');
     }
     
-    log('Canvas initialization complete (image loading, events, controls enabled).');
+    log('Canvas initialization complete.');
 }
 
 // Update canvas dimensions if window resizes
 function refreshCanvasDimensions() {
     const canvasContainer = document.querySelector('.canvas-container');
-    const containerWidth = canvasContainer.clientWidth - 40;
-    const containerHeight = canvasContainer.clientHeight - 40;
+    const containerWidth = canvasContainer.clientWidth;
+    const containerHeight = canvasContainer.clientHeight;
     
     const canvasWidth = Math.min(800, containerWidth);
     const canvasHeight = Math.min(690, containerHeight);
     
     canvas.setDimensions({ width: canvasWidth, height: canvasHeight });
     
-    // Re-render the canvas with the new dimensions
     if (backgroundImage) {
-        canvas.setBackgroundImage(backgroundImage, function() {
-            // Use setTimeout to allow DOM to register changes before rendering
-            setTimeout(function() {
-                canvas.renderAll();
-                canvas.calcOffset();
-                log('Canvas dimensions updated with timing adjustments');
-            }, 50);
-        });
+        canvas.add(backgroundImage);
+        backgroundImage.moveTo(0);
+        canvas.renderAll();
+        canvas.calcOffset();
+    } else {
+        canvas.renderAll();
+        canvas.calcOffset();
     }
 }
 
-// --- Restore Image Loading (fromURL method) and Filter Logic --- 
+// Restore Image Loading (fromURL method) and Filter Logic
 function loadBackgroundImage() {
-    log('Attempting to load background image (as foreground object)...');
+    log('Loading background image...');
     const imagePath = '/images/plain.png';
 
     fabric.Image.fromURL(imagePath, function(img) {
-        log('Image loaded via fabric.Image.fromURL.');
-        
         img.scaleToWidth(canvas.width);
         
-        // Add as a foreground object instead of background
         canvas.add(img);
         img.moveTo(0); 
-        log('Image added to canvas as foreground object.');
         
-        // --- Make image non-interactive ---
         img.selectable = false;
         img.evented = false; 
-        log('Made image object non-selectable and non-evented.');
-        // --- End non-interactive ---
         
-        // Store reference for filters
         backgroundImage = img; 
 
-        // Render the canvas
         setTimeout(function() {
-            log('Rendering canvas after adding image object (timeout 100ms).');
-            canvas.calcOffset(); // Recalculate offset BEFORE rendering
+            canvas.calcOffset();
             canvas.renderAll();
-            log('Initial image render complete. Initializing filters.');
-            // Initialize filters AFTER image is added and rendered
             initializeAndApplyFilters();
         }, 100);
 
     }, {
         crossOrigin: 'anonymous' 
     });
-
-    log(`Initiated loading image from: ${imagePath} using fabric.Image.fromURL`);
 }
 
 function initializeAndApplyFilters() {
     if (!backgroundImage) {
-        log('Cannot apply filters: backgroundImage not available.');
+        console.warn('Cannot apply filters: backgroundImage not available.');
         return;
     }
     
-    log('Initializing filters...');
     brightnessFilter = new fabric.Image.filters.Brightness({ brightness: 0 });
     contrastFilter = new fabric.Image.filters.Contrast({ contrast: 0 });
     gammaFilter = new fabric.Image.filters.Gamma({ gamma: [1, 1, 1] });
     
     backgroundImage.filters = []; 
     backgroundImage.filters.push(brightnessFilter, contrastFilter, gammaFilter);
-    log('Filters initialized and added to background image.');
-    
-    // Apply the filters initially (optional, could wait for slider interaction)
-    // applyBackgroundFilters(); // Maybe don't apply immediately, let sliders do it
 }
 
 function applyBackgroundFilters() {
     if (backgroundImage && backgroundImage.filters && backgroundImage.filters.length > 0) {
-        log('Applying filters to foreground image...');
         backgroundImage.applyFilters();
         setTimeout(function() {
-            log('Rendering canvas after applying filters (timeout 100ms).');
-            canvas.calcOffset(); // Recalculate offset BEFORE rendering
+            canvas.calcOffset();
             canvas.renderAll();
         }, 100); 
     } else if (backgroundImage) {
-        log('BackgroundImage (object) exists but no filters to apply.');
     } else {
-        log('Skipping filter application: backgroundImage object not loaded yet.');
     }
 }
 // --- End Restore --- 
@@ -286,14 +211,12 @@ function setupImageControlListeners() {
         gammaValueSpan.textContent = value.toFixed(2);
         applyBackgroundFilters();
     });
-    log('Image control listeners set up.');
 }
 
 // Setup Canvas Event Listeners (Restore full logic)
 function setupCanvasEventListeners() {
     // Draw Mask button
     drawMaskBtn.addEventListener('click', function() {
-        log('Draw Mask button clicked.'); // Updated log
         if (drawingMode) {
             exitDrawingMode();
         } else {
@@ -303,28 +226,22 @@ function setupCanvasEventListeners() {
     
     // Clear All button
     clearAllBtn.addEventListener('click', function() {
-        log('Clear All button clicked.'); // Updated log
         if (drawingMode) {
-            exitDrawingMode(); // Exit drawing mode if active
+            exitDrawingMode();
         }
         
-        canvas.clear(); // Clear fabric objects
-        // Re-add the image object since canvas.clear() removes everything
+        canvas.clear();
         if (backgroundImage) {
             canvas.add(backgroundImage);
-            backgroundImage.moveTo(0); // Ensure it's in the back
-            log('Re-added background image object after clear.');
+            backgroundImage.moveTo(0);
         } else {
-            log('Cannot re-add background image, it was not loaded.')
+            console.warn('Cannot re-add background image, it was not loaded.')
         }
         
         polygonGroups = [];
         currentGroup = null;
-        // Render after clearing and potentially re-adding image
         canvas.renderAll(); 
-        log('Cleared all polygons and reset groups.');
     });
-    log('Full canvas event listeners set up.'); // Updated log
 }
 
 // --- Restore Drawing Mode Logic ---
@@ -332,12 +249,11 @@ function enterDrawingMode() {
     drawingMode = true;
     isDrawing = false;
     points = [];
-    activeQuadrant = null; // Reset active quadrant
+    activeQuadrant = null;
     
     drawMaskBtn.innerHTML = '<i class="fas fa-times"></i> Cancel Drawing';
     canvas.defaultCursor = 'crosshair';
     
-    // Make the background image unselectable during drawing
     if (backgroundImage) {
         backgroundImage.selectable = false;
         backgroundImage.evented = false;
@@ -370,11 +286,9 @@ function exitDrawingMode() {
     drawMaskBtn.innerHTML = '<i class="fas fa-pen"></i> Draw Mask';
     canvas.defaultCursor = 'default';
     
-    // Make the background image selectable again
     if (backgroundImage) {
         // backgroundImage.selectable = true; // Keep it false
         // backgroundImage.evented = true;    // Keep it false
-        log('Image object remains non-selectable after exiting drawing mode.');
     }
     
     canvas.renderAll();

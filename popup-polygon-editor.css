@@ -125,10 +125,11 @@ body {
 /* Canvas Container */
 .canvas-container {
     flex: 1;
-    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     overflow: hidden;
     background-color: var(--light-color);
-    position: relative;
 }
 
 canvas {
@@ -140,7 +141,7 @@ canvas {
 /* Controls Container */
 .controls-container {
     width: 280px;
-    padding: 20px;
+    padding: 10px;
     background-color: white;
     border-left: 1px solid #eee;
     display: flex;

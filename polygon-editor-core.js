@@ -1,11 +1,6 @@
 // Polygon Editor Core Functionality
 // This file contains the core polygon editing functionality
 
-// --- Global State for Vertex Dragging ---
-let isDraggingVertex = false;
-let draggedVertexInfo = null; // { circle: fabric.Circle, polygon: fabric.Polygon, pointIndex: number }
-// --- End Global State ---
-
 // Function to determine which quadrant a point belongs to
 function getQuadrant(point) {
     const x = point.x;
@@ -228,72 +223,6 @@ function createPolygonInQuadrant(points, quadrant, groupId) {
     return polygon;
 }
 
-// --- Global Mouse Handlers for Vertex Dragging ---
-function globalMouseMove(event) {
-    if (!isDraggingVertex || !draggedVertexInfo || !canvas) return;
-
-    const { circle, polygon, pointIndex } = draggedVertexInfo;
-    const pointer = canvas.getPointer(event);
-
-    // Constrain within quadrant boundaries (using circle's stored quadrant)
-    const quadrant = circle.quadrant;
-    const radius = circle.radius || 6; // Use stored radius or default
-
-    const xMin = quadrant === 0 || quadrant === 2 ? 0 + radius : quadrantWidth + radius;
-    const xMax = quadrant === 0 || quadrant === 2 ? quadrantWidth - radius : canvas.width - radius;
-    const yMin = quadrant === 0 || quadrant === 1 ? 0 + radius : quadrantHeight + radius;
-    const yMax = quadrant === 0 || quadrant === 1 ? quadrantHeight - radius : canvas.height - radius;
-
-    // Apply the constraints directly to the pointer coordinates
-    let constrainedX = pointer.x;
-    let constrainedY = pointer.y;
-    if (constrainedX < xMin) constrainedX = xMin;
-    if (constrainedX > xMax) constrainedX = xMax;
-    if (constrainedY < yMin) constrainedY = yMin;
-    if (constrainedY > yMax) constrainedY = yMax;
-
-    // Update the circle's position visually
-    circle.set({ left: constrainedX, top: constrainedY });
-
-    // Convert constrained absolute position back to relative polygon coordinates
-    const invertedMatrix = fabric.util.invertTransform(polygon.calcTransformMatrix());
-    const newRelativePoint = fabric.util.transformPoint(
-        { x: constrainedX, y: constrainedY },
-        invertedMatrix
-    );
-
-    // Update the polygon point directly
-    polygon.points[pointIndex] = {
-        x: newRelativePoint.x + polygon.pathOffset.x,
-        y: newRelativePoint.y + polygon.pathOffset.y
-    };
-
-    // Force polygon redraw and coordinate recalculation
-    polygon.set({
-        dirty: true,
-        objectCaching: false
-    });
-    polygon.setCoords();
-
-    // Sync the change to other quadrants
-    syncPolygonPoints(polygon);
-    canvas.requestRenderAll(); // Use requestRenderAll for potentially frequent updates
-}
-
-function globalMouseUp(event) {
-    if (isDraggingVertex) {
-        isDraggingVertex = false;
-        draggedVertexInfo = null;
-        document.removeEventListener('mousemove', globalMouseMove);
-        document.removeEventListener('mouseup', globalMouseUp);
-        if(canvas) {
-          canvas.requestRenderAll(); // Final render
-        }
-        log('Vertex drag ended.');
-    }
-}
-// --- End Global Mouse Handlers ---
-
 // Make polygon points editable
 function makeEditable(polygon) {
     // Mark polygon as being edited
@@ -310,7 +239,7 @@ function makeEditable(polygon) {
         objectCaching: false // Disable caching to ensure polygon renders properly
     });
     
-    // Store original properties (still needed? maybe not for position)
+    // Store original properties to restore later
     polygon.originalLeft = polygon.left;
     polygon.originalTop = polygon.top;
     polygon.originalScaleX = polygon.scaleX;
@@ -341,27 +270,51 @@ function makeEditable(polygon) {
             hasBorders: false,
             hasControls: false,
             pointIndex: index,
-            polygonId: polygon.groupId, // Use groupId for consistency
+            polygonId: polygon.groupId,
             quadrant: polygon.quadrant,
             editPoint: true
         });
         
-        // Add mousedown listener to initiate global dragging
-        circle.on('mousedown', function(e) {
-            if (!isDraggingVertex) { // Prevent starting multiple drags
-                isDraggingVertex = true;
-                draggedVertexInfo = {
-                    circle: this, // The circle being dragged
-                    polygon: polygon, // The associated polygon
-                    pointIndex: this.pointIndex // The index of the point
-                };
-                document.addEventListener('mousemove', globalMouseMove);
-                document.addEventListener('mouseup', globalMouseUp);
-                log(`Vertex drag started on point ${this.pointIndex} of polygon ${polygon.groupId}-${polygon.quadrant}`);
-                // Prevent fabric from handling the drag internally on the object
-                e.e.stopPropagation(); 
-                e.e.preventDefault();
-            }
+        circle.on('moving', function() {
+            // Constrain within quadrant boundaries
+            const quadrant = this.quadrant;
+            
+            // Calculate the actual boundaries for control point
+            const xMin = quadrant === 0 || quadrant === 2 ? 0: quadrantWidth;
+            const xMax = quadrant === 0 || quadrant === 2 ? quadrantWidth: canvas.width;
+            const yMin = quadrant === 0 || quadrant === 1 ? 0: quadrantHeight;
+            const yMax = quadrant === 0 || quadrant === 1 ? quadrantHeight: canvas.height;
+            
+            // Apply the constraints
+            if (this.left < xMin) this.set({ left: xMin });
+            if (this.left > xMax) this.set({ left: xMax });
+            if (this.top < yMin) this.set({ top: yMin });
+            if (this.top > yMax) this.set({ top: yMax });
+            
+            // Convert absolute control point position back to relative polygon coordinates
+            const invertedMatrix = fabric.util.invertTransform(polygon.calcTransformMatrix());
+            const newRelativePoint = fabric.util.transformPoint(
+                { x: this.left, y: this.top },
+                invertedMatrix
+            );
+            
+            // Update the polygon point directly
+            polygon.points[this.pointIndex] = { 
+                x: newRelativePoint.x + polygon.pathOffset.x, 
+                y: newRelativePoint.y + polygon.pathOffset.y 
+            };
+            
+            // Force polygon to redraw
+            polygon.set({
+                dirty: true,
+                objectCaching: false
+            });
+            
+            polygon.setCoords(); // Recalculate coords
+            
+            // Sync the change to other quadrants
+            syncPolygonPoints(polygon);
+            canvas.renderAll();
         });
         
         canvas.add(circle);
@@ -561,7 +514,7 @@ function syncPolygonEvent(event) {
             
             // Keep points within quadrant
             const bounds = polygon.quadrantBounds;
-            const margin = 0.5;
+            const margin = 0;
             
             const constrainedPoints = newPoints.map(point => {
                 let x = point.x;
