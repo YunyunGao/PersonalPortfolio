@@ -1,6 +1,8 @@
 // Polygon Editor Core Functionality
 // This file contains the core polygon editing functionality
 
+// let isExitingEditMode = false; // Flag to prevent sync during exit -- REMOVED
+
 // Function to determine which quadrant a point belongs to
 function getQuadrant(point) {
     const x = point.x;
@@ -227,7 +229,7 @@ function createPolygonInQuadrant(points, quadrant, groupId) {
 function makeEditable(polygon) {
     // Mark polygon as being edited
     polygon.isEditing = true;
-    
+
     // Disable controls for scaling and rotation while in vertex edit mode
     polygon.set({
         hasControls: false,
@@ -303,14 +305,11 @@ function makeEditable(polygon) {
                 x: newRelativePoint.x + polygon.pathOffset.x, 
                 y: newRelativePoint.y + polygon.pathOffset.y 
             };
-            
-            // Force polygon to redraw
-            polygon.set({
-                dirty: true,
-                objectCaching: false
-            });
-            
-            polygon.setCoords(); // Recalculate coords
+
+            // --- Recalculate dimensions and coords DURING drag ---
+            polygon._calcDimensions();
+            polygon.setCoords(); // Recalculate coords for the source polygon
+            // --- End Recalculation ---
             
             // Sync the change to other quadrants
             syncPolygonPoints(polygon);
@@ -323,7 +322,7 @@ function makeEditable(polygon) {
 
 // Sync polygon points when editing vertices
 function syncPolygonPoints(sourcePolygon) {
-    if (isSyncing) return;
+    if (isSyncing /* || isExitingEditMode -- REMOVED */) return;
     isSyncing = true;
     
     const groupId = sourcePolygon.groupId;
@@ -355,8 +354,11 @@ function syncPolygonPoints(sourcePolygon) {
                 dirty: true,
                 objectCaching: false
             });
-            
-            polygon.setCoords(); // Recalculate coords
+
+            // --- Recalculate dimensions and coords for synced polygons ---
+            polygon._calcDimensions(); 
+            polygon.setCoords(); 
+            // --- End Recalculation ---
             
             // Update control points if in edit mode
             updateControlPoints(polygon);
@@ -397,7 +399,7 @@ function exitEditMode() {
             canvas.remove(obj);
         }
     });
-    
+
     // Clear editing flag on all polygons and restore controls
     polygonGroups.forEach(group => {
         group.forEach(polygon => {
@@ -405,35 +407,13 @@ function exitEditMode() {
             if (!polygon.isEditing) return; // Skip if not edited
 
             polygon.isEditing = false;
-            
-            // Clear stored original values
+
+            // Clear stored original values (These were just for reference)
             delete polygon.originalLeft;
             delete polygon.originalTop;
             delete polygon.originalScaleX;
             delete polygon.originalScaleY;
             delete polygon.originalAngle;
-            
-            // Force the polygon to recalculate its dimensions
-            const finalPoints = polygon.points.map(p => ({ x: p.x, y: p.y }));
-            
-            // Mark for redraw and disable caching
-            polygon.set({
-                dirty: true,
-                objectCaching: false
-            });
-            
-            // Set the points again to trigger internal updates
-            polygon.set('points', finalPoints);
-
-            // Explicitly recalculate dimensions based on the new points
-            polygon._setPositionDimensions({}); 
-            
-            // Ensure coordinates and bounding box are recalculated
-            polygon.setCoords(); 
-
-            // Restore update to last known position AFTER editing
-            polygon.lastTop = polygon.top;
-            polygon.lastLeft = polygon.left;
 
             // Restore controls and interactivity
             polygon.set({
@@ -445,11 +425,30 @@ function exitEditMode() {
                 lockMovementY: false,
                 objectCaching: false // Re-enable caching if desired, or keep false
             });
+
+            // Update last known position AFTER editing based on current state
+            // NOTE: width/height might be stale here, but position is likely what we want
+            polygon.lastTop = polygon.top;
+            polygon.lastLeft = polygon.left;
+
+            // Finalize coordinates based on current state 
+            // (may use stale width/height, but updates visual position)
+             polygon.setCoords();
+
+             // --- ADD Simplified Log ---
+             console.log(`[DEBUG exitEditMode] Polygon ${polygon.groupId}-${polygon.quadrant} FINAL STATE (Simplified):`,
+                 `\n  Pos: (${polygon.left.toFixed(2)}, ${polygon.top.toFixed(2)})`,
+                 `\n  Scale: (${polygon.scaleX.toFixed(2)}, ${polygon.scaleY.toFixed(2)})`,
+                 `\n  Width/Height: (${polygon.width.toFixed(2)}, ${polygon.height.toFixed(2)})`,
+                 `\n  HasControls: ${polygon.hasControls}`
+              );
+             // --- END Log ---
+
         });
     });
-    
+
     canvas.renderAll();
-    log('Exited editing mode');
+    log('Exited editing mode (Simplified)');
 }
 
 // Sync polygon event handler

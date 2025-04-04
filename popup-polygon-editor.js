@@ -54,34 +54,52 @@ function initializeCanvas() {
         console.error('ERROR: Canvas container not found!');
         return;
     }
+
+    // Get container dimensions
     const containerWidth = canvasContainer.clientWidth;
     const containerHeight = canvasContainer.clientHeight;
     
-    const availableWidth = containerWidth;
-    const availableHeight = containerHeight;
-
-    const canvasWidth = Math.min(800, availableWidth);
-    const canvasHeight = Math.min(690, availableHeight);
+    // Calculate canvas dimensions
+    const canvasWidth = Math.min(800, containerWidth);
+    const canvasHeight = Math.min(690, containerHeight);
 
     if (canvasWidth <= 0 || canvasHeight <= 0) {
         console.error('ERROR: Calculated canvas dimensions are invalid.');
         return;
     }
 
+    // Create canvas with proper dimensions
     canvas = new fabric.Canvas('canvas', {
         width: canvasWidth,
         height: canvasHeight,
         selection: false,
         objectCaching: false,
         renderOnAddRemove: false,
+        preserveObjectStacking: true
     });
 
-    // Keep this fix
+    // Ensure canvas elements are properly positioned
     if (canvas.upperCanvasEl) {
-        canvas.upperCanvasEl.style.backgroundColor = 'transparent'; // This is extremely important for popup environment.
-    } else {
-        console.warn('Warning: upperCanvasEl not found after centering.');
+        canvas.upperCanvasEl.style.backgroundColor = 'transparent';
+        canvas.upperCanvasEl.style.position = 'absolute';
+        canvas.upperCanvasEl.style.top = '0';
+        canvas.upperCanvasEl.style.left = '0';
+        canvas.upperCanvasEl.style.width = '100%';
+        canvas.upperCanvasEl.style.height = '100%';
     }
+
+    if (canvas.lowerCanvasEl) {
+        canvas.lowerCanvasEl.style.position = 'absolute';
+        canvas.lowerCanvasEl.style.top = '0';
+        canvas.lowerCanvasEl.style.left = '0';
+        canvas.lowerCanvasEl.style.width = '100%';
+        canvas.lowerCanvasEl.style.height = '100%';
+    }
+
+    // Set up canvas container
+    canvas.wrapperEl.style.position = 'relative';
+    canvas.wrapperEl.style.width = '100%';
+    canvas.wrapperEl.style.height = '100%';
     
     // --- Re-enable functionality --- 
     loadBackgroundImage();
@@ -105,13 +123,33 @@ function initializeCanvas() {
 // Update canvas dimensions if window resizes
 function refreshCanvasDimensions() {
     const canvasContainer = document.querySelector('.canvas-container');
+    if (!canvasContainer || !canvas) return;
+
     const containerWidth = canvasContainer.clientWidth;
     const containerHeight = canvasContainer.clientHeight;
     
     const canvasWidth = Math.min(800, containerWidth);
     const canvasHeight = Math.min(690, containerHeight);
     
-    canvas.setDimensions({ width: canvasWidth, height: canvasHeight });
+    // Update canvas dimensions
+    canvas.setDimensions({ 
+        width: canvasWidth, 
+        height: canvasHeight 
+    });
+    
+    // Update wrapper dimensions
+    canvas.wrapperEl.style.width = '100%';
+    canvas.wrapperEl.style.height = '100%';
+    
+    // Update both canvas layers
+    if (canvas.upperCanvasEl) {
+        canvas.upperCanvasEl.style.width = '100%';
+        canvas.upperCanvasEl.style.height = '100%';
+    }
+    if (canvas.lowerCanvasEl) {
+        canvas.lowerCanvasEl.style.width = '100%';
+        canvas.lowerCanvasEl.style.height = '100%';
+    }
     
     if (backgroundImage) {
         canvas.add(backgroundImage);
@@ -242,6 +280,56 @@ function setupCanvasEventListeners() {
         currentGroup = null;
         canvas.renderAll(); 
     });
+
+    // --- ADD LOGGING FOR SELECTION ---
+    canvas.on('selection:updated', function(e) {
+        if (e.selected && e.selected.length === 1) {
+            const selectedObject = e.selected[0];
+            // Check if it's one of our polygons (using a known property like groupId)
+            if (selectedObject.groupId !== undefined) {
+                console.log(`[DEBUG SelectionUpdated] Polygon ${selectedObject.groupId}-${selectedObject.quadrant} SELECTED:`,
+                    `\n  Pos: (${selectedObject.left.toFixed(2)}, ${selectedObject.top.toFixed(2)})`,
+                    `\n  Scale: (${selectedObject.scaleX.toFixed(2)}, ${selectedObject.scaleY.toFixed(2)})`,
+                    `\n  Width/Height: (${selectedObject.width.toFixed(2)}, ${selectedObject.height.toFixed(2)})`,
+                    `\n  PathOffset: (${selectedObject.pathOffset.x.toFixed(2)}, ${selectedObject.pathOffset.y.toFixed(2)})`,
+                    `\n  aCoords TL: (${selectedObject.aCoords?.tl?.x?.toFixed(2)}, ${selectedObject.aCoords?.tl?.y?.toFixed(2)})`,
+                    `\n  aCoords BR: (${selectedObject.aCoords?.br?.x?.toFixed(2)}, ${selectedObject.aCoords?.br?.y?.toFixed(2)})`
+                );
+            }
+        }
+    });
+    // --- END LOGGING FOR SELECTION ---
+
+    // --- ADD LOGGING FOR MOUSE:UP ---
+    canvas.on('mouse:up', function(e) {
+        if (e.target && e.target.groupId !== undefined) {
+            const selectedObject = e.target; // Target of the mouse event
+
+            // --- Recalculate state on selection --- 
+            console.log(`[DEBUG MouseUp] Polygon ${selectedObject.groupId}-${selectedObject.quadrant} BEFORE Recalc:`,
+                `\n  Pos: (${selectedObject.left.toFixed(2)}, ${selectedObject.top.toFixed(2)})`,
+                `\n  Width/Height: (${selectedObject.width.toFixed(2)}, ${selectedObject.height.toFixed(2)})`
+            );
+
+            selectedObject._setPositionDimensions({}); // Recalc pos, width, height, pathOffset
+            selectedObject.setCoords(); // Update controls
+
+            console.log(`[DEBUG MouseUp] Polygon ${selectedObject.groupId}-${selectedObject.quadrant} AFTER Recalc:`,
+                `\n  Pos: (${selectedObject.left.toFixed(2)}, ${selectedObject.top.toFixed(2)})`,
+                `\n  Scale: (${selectedObject.scaleX.toFixed(2)}, ${selectedObject.scaleY.toFixed(2)})`,
+                `\n  Width/Height: (${selectedObject.width.toFixed(2)}, ${selectedObject.height.toFixed(2)})`,
+                `\n  PathOffset: (${selectedObject.pathOffset.x.toFixed(2)}, ${selectedObject.pathOffset.y.toFixed(2)})`,
+                `\n  aCoords TL: (${selectedObject.aCoords?.tl?.x?.toFixed(2)}, ${selectedObject.aCoords?.tl?.y?.toFixed(2)})`,
+                `\n  aCoords BR: (${selectedObject.aCoords?.br?.x?.toFixed(2)}, ${selectedObject.aCoords?.br?.y?.toFixed(2)})`
+            );
+            
+            // Might need a render if selection doesn't trigger it
+            canvas.requestRenderAll();
+            // --- End Recalculation ---
+
+        }
+    });
+    // --- END LOGGING FOR MOUSE:UP ---
 }
 
 // --- Restore Drawing Mode Logic ---
