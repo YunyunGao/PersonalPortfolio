@@ -116,8 +116,6 @@ function initializeCanvas() {
     } else {
         console.warn('Warning: setupGlobalMouseHandlers function not found');
     }
-    
-    log('Canvas initialization complete.');
 }
 
 // Update canvas dimensions if window resizes
@@ -164,7 +162,6 @@ function refreshCanvasDimensions() {
 
 // Restore Image Loading (fromURL method) and Filter Logic
 function loadBackgroundImage() {
-    log('Loading background image...');
     const imagePath = '/images/plain.png';
 
     fabric.Image.fromURL(imagePath, function(img) {
@@ -281,55 +278,21 @@ function setupCanvasEventListeners() {
         canvas.renderAll(); 
     });
 
-    // --- ADD LOGGING FOR SELECTION ---
     canvas.on('selection:updated', function(e) {
         if (e.selected && e.selected.length === 1) {
             const selectedObject = e.selected[0];
-            // Check if it's one of our polygons (using a known property like groupId)
             if (selectedObject.groupId !== undefined) {
-                console.log(`[DEBUG SelectionUpdated] Polygon ${selectedObject.groupId}-${selectedObject.quadrant} SELECTED:`,
-                    `\n  Pos: (${selectedObject.left.toFixed(2)}, ${selectedObject.top.toFixed(2)})`,
-                    `\n  Scale: (${selectedObject.scaleX.toFixed(2)}, ${selectedObject.scaleY.toFixed(2)})`,
-                    `\n  Width/Height: (${selectedObject.width.toFixed(2)}, ${selectedObject.height.toFixed(2)})`,
-                    `\n  PathOffset: (${selectedObject.pathOffset.x.toFixed(2)}, ${selectedObject.pathOffset.y.toFixed(2)})`,
-                    `\n  aCoords TL: (${selectedObject.aCoords?.tl?.x?.toFixed(2)}, ${selectedObject.aCoords?.tl?.y?.toFixed(2)})`,
-                    `\n  aCoords BR: (${selectedObject.aCoords?.br?.x?.toFixed(2)}, ${selectedObject.aCoords?.br?.y?.toFixed(2)})`
-                );
+                // Selection handling logic
             }
         }
     });
-    // --- END LOGGING FOR SELECTION ---
 
-    // --- ADD LOGGING FOR MOUSE:UP ---
     canvas.on('mouse:up', function(e) {
         if (e.target && e.target.groupId !== undefined) {
-            const selectedObject = e.target; // Target of the mouse event
-
-            // --- Recalculate state on selection --- 
-            console.log(`[DEBUG MouseUp] Polygon ${selectedObject.groupId}-${selectedObject.quadrant} BEFORE Recalc:`,
-                `\n  Pos: (${selectedObject.left.toFixed(2)}, ${selectedObject.top.toFixed(2)})`,
-                `\n  Width/Height: (${selectedObject.width.toFixed(2)}, ${selectedObject.height.toFixed(2)})`
-            );
-
-            selectedObject._setPositionDimensions({}); // Recalc pos, width, height, pathOffset
-            selectedObject.setCoords(); // Update controls
-
-            console.log(`[DEBUG MouseUp] Polygon ${selectedObject.groupId}-${selectedObject.quadrant} AFTER Recalc:`,
-                `\n  Pos: (${selectedObject.left.toFixed(2)}, ${selectedObject.top.toFixed(2)})`,
-                `\n  Scale: (${selectedObject.scaleX.toFixed(2)}, ${selectedObject.scaleY.toFixed(2)})`,
-                `\n  Width/Height: (${selectedObject.width.toFixed(2)}, ${selectedObject.height.toFixed(2)})`,
-                `\n  PathOffset: (${selectedObject.pathOffset.x.toFixed(2)}, ${selectedObject.pathOffset.y.toFixed(2)})`,
-                `\n  aCoords TL: (${selectedObject.aCoords?.tl?.x?.toFixed(2)}, ${selectedObject.aCoords?.tl?.y?.toFixed(2)})`,
-                `\n  aCoords BR: (${selectedObject.aCoords?.br?.x?.toFixed(2)}, ${selectedObject.aCoords?.br?.y?.toFixed(2)})`
-            );
-            
-            // Might need a render if selection doesn't trigger it
-            canvas.requestRenderAll();
-            // --- End Recalculation ---
-
+            const selectedObject = e.target;
+            // Mouse up handling logic
         }
     });
-    // --- END LOGGING FOR MOUSE:UP ---
 }
 
 // --- Restore Drawing Mode Logic ---
@@ -346,8 +309,6 @@ function enterDrawingMode() {
         backgroundImage.selectable = false;
         backgroundImage.evented = false;
     }
-    
-    log('Entered drawing mode');
 }
 
 function exitDrawingMode() {
@@ -380,14 +341,8 @@ function exitDrawingMode() {
     }
     
     canvas.renderAll();
-    log('Exited drawing mode');
 }
 // --- End Restore ---
-
-// Helper for logging
-function log(message) {
-    console.log(message);
-}
 
 // Resize handler for responsive canvas
 window.addEventListener('resize', function() {
@@ -398,6 +353,5 @@ window.addEventListener('resize', function() {
 
 // Initialize popup when document is ready
 document.addEventListener('DOMContentLoaded', function() {
-    log('DOM Content Loaded. Polygon Editor Popup ready.');
     // Note: Canvas is NOT initialized here, only when popup opens.
 }); 

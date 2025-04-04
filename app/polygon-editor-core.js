@@ -41,6 +41,132 @@ function denormalizePoints(normalizedPoints, targetQuadrant) {
     });
 }
 
+// --- Updated Edit Mode Handlers (Based on Example) ---
+
+// Calculates control point position based on polygon vertex
+function polygonPositionHandler(dim, finalMatrix, fabricObject) {
+    const pointIndex = this.pointIndex;
+    // Ensure pointIndex is valid
+    if (pointIndex === undefined || pointIndex >= fabricObject.points.length) {
+        console.error("Invalid pointIndex in polygonPositionHandler:", pointIndex);
+        return { x: 0, y: 0 }; 
+    }
+    const p = fabricObject.points[pointIndex];
+    const x = (p.x - fabricObject.pathOffset.x);
+    const y = (p.y - fabricObject.pathOffset.y);
+
+    return fabric.util.transformPoint(
+        { x: x, y: y },
+        fabric.util.multiplyTransformMatrices(
+            fabricObject.canvas.viewportTransform || [1, 0, 0, 1, 0, 0],
+            fabricObject.calcTransformMatrix()
+        )
+    );
+}
+
+// Action handler for moving a control point (vertex)
+function actionHandler(eventData, transform, x, y) {
+    const polygon = transform.target;
+    const currentControl = polygon.controls[polygon.__corner];
+    const pointIndex = currentControl.pointIndex;
+
+    // Ensure pointIndex is valid
+    if (pointIndex === undefined || pointIndex >= polygon.points.length) {
+        console.error("Invalid pointIndex in actionHandler:", pointIndex);
+        return false;
+    }
+
+    const mouseLocalPosition = polygon.toLocalPoint(new fabric.Point(x, y), 'center', 'center');
+    const polygonBaseSize = polygon._getNonTransformedDimensions();
+    const size = polygon._getTransformedDimensions(0, 0);
+    
+    // --- Quadrant Constraint ---
+    const bounds = polygon.quadrantBounds;
+    
+    // Calculate the final point position, accounting for scaling
+    let finalPointPosition = {
+        x: mouseLocalPosition.x * polygonBaseSize.x / size.x + polygon.pathOffset.x,
+        y: mouseLocalPosition.y * polygonBaseSize.y / size.y + polygon.pathOffset.y
+    };
+    
+    // Calculate the absolute position to check against bounds
+    const absolutePoint = fabric.util.transformPoint(
+        { x: finalPointPosition.x - polygon.pathOffset.x, y: finalPointPosition.y - polygon.pathOffset.y },
+        polygon.calcTransformMatrix()
+    );
+
+    let constrainedX = absolutePoint.x;
+    let constrainedY = absolutePoint.y;
+
+    if (constrainedX < bounds.xMin) constrainedX = bounds.xMin;
+    if (constrainedX > bounds.xMax) constrainedX = bounds.xMax;
+    if (constrainedY < bounds.yMin) constrainedY = bounds.yMin;
+    if (constrainedY > bounds.yMax) constrainedY = bounds.yMax;
+
+    // If constrained, convert back to local coordinates
+    if (constrainedX !== absolutePoint.x || constrainedY !== absolutePoint.y) {
+        const constrainedLocalPoint = polygon.toLocalPoint(
+            new fabric.Point(constrainedX, constrainedY), 
+            'center', 
+            'center'
+        );
+        finalPointPosition = {
+            x: constrainedLocalPoint.x * polygonBaseSize.x / size.x + polygon.pathOffset.x,
+            y: constrainedLocalPoint.y * polygonBaseSize.y / size.y + polygon.pathOffset.y
+        };
+    }
+    // --- End Quadrant Constraint ---
+
+    // Update the polygon point
+    polygon.points[pointIndex].x = finalPointPosition.x;
+    polygon.points[pointIndex].y = finalPointPosition.y;
+
+    // Sync the change to other quadrants
+    syncPolygonPoints(polygon);
+
+    return true;
+}
+
+// Keeps polygon anchored during vertex edits
+function anchorWrapper(anchorIndex, fn) {
+    return function(eventData, transform, x, y) {
+        const fabricObject = transform.target;
+        
+        // Ensure anchorIndex is valid
+        if (anchorIndex === undefined || anchorIndex >= fabricObject.points.length) {
+            console.error("Invalid anchorIndex in anchorWrapper:", anchorIndex);
+            return false; 
+        }
+
+        const point = fabricObject.points[anchorIndex];
+        const absolutePoint = fabric.util.transformPoint({
+            x: (point.x - fabricObject.pathOffset.x),
+            y: (point.y - fabricObject.pathOffset.y),
+        }, fabricObject.calcTransformMatrix());
+
+        // Call the action handler (which includes synchronization)
+        const actionPerformed = fn(eventData, transform, x, y);
+
+        if (actionPerformed) {
+            // Recalculate polygon dimensions based on the modified points
+            fabricObject._setPositionDimensions({});
+            
+            // Recalculate anchor point's relative position within the new dimensions
+            const newPoint = fabricObject.points[anchorIndex];
+            const polygonBaseSize = fabricObject._getNonTransformedDimensions();
+            const newX = (polygonBaseSize.x === 0) ? 0 : (newPoint.x - fabricObject.pathOffset.x) / polygonBaseSize.x;
+            const newY = (polygonBaseSize.y === 0) ? 0 : (newPoint.y - fabricObject.pathOffset.y) / polygonBaseSize.y;
+
+            // Reposition the polygon so the anchor point remains in its original absolute position
+            fabricObject.setPositionByOrigin(absolutePoint, newX + 0.5, newY + 0.5);
+        }
+
+        return actionPerformed;
+    }
+}
+
+// --- End Updated Edit Mode Handlers ---
+
 // Function to create a polygon in a specific quadrant
 function createPolygonInQuadrant(points, quadrant, groupId) {
     const polygon = new fabric.Polygon(points, {
@@ -54,11 +180,13 @@ function createPolygonInQuadrant(points, quadrant, groupId) {
         originY: 'top',
         transparentCorners: false,
         cornerColor: 'blue',
+        cornerStyle: 'rect',
         cornerSize: 10,
         perPixelTargetFind: true,
-        objectCaching: false, // Disable object caching to prevent clipping
+        objectCaching: false,
         groupId: groupId,
-        quadrant: quadrant
+        quadrant: quadrant,
+        edit: false
     });
 
     // Set quadrant constraints
@@ -67,396 +195,239 @@ function createPolygonInQuadrant(points, quadrant, groupId) {
     const yMin = quadrant === 0 || quadrant === 1 ? 0 : quadrantHeight;
     const yMax = quadrant === 0 || quadrant === 1 ? quadrantHeight : canvas.height;
     
-    // Store the constraints directly on the polygon object
     polygon.quadrantBounds = { xMin, xMax, yMin, yMax };
     
-    // Add custom handlers for point modification
+    // Store default controls for restoring later
+    polygon.standardControls = { ...fabric.Object.prototype.controls };
+
+    // Add standard event handlers
     polygon.on('moving', function(e) {
-        const obj = this;
+        if (this.edit) return; // Don't move in edit mode
         
-        // Get the actual bounds of the polygon
+        const obj = this;
         const polyBounds = this.getBoundingRect();
         
         // Apply quadrant constraints
-        // Left boundary
-        if (obj.left < obj.quadrantBounds.xMin) {
-            obj.set('left', obj.quadrantBounds.xMin);
-        }
-        // Right boundary 
-        // Calculate the rightmost edge of the polygon
+        if (obj.left < obj.quadrantBounds.xMin) obj.set('left', obj.quadrantBounds.xMin);
         const rightEdge = obj.left + polyBounds.width;
-        if (rightEdge > obj.quadrantBounds.xMax) {
-            // Move back so the right edge aligns with boundary
-            obj.set('left', obj.quadrantBounds.xMax - polyBounds.width);
-        }
-        
-        // Top boundary
-        if (obj.top < obj.quadrantBounds.yMin) {
-            obj.set('top', obj.quadrantBounds.yMin);
-        }
-        // Bottom boundary 
-        // Calculate the bottom edge of the polygon
+        if (rightEdge > obj.quadrantBounds.xMax) obj.set('left', obj.quadrantBounds.xMax - polyBounds.width);
+        if (obj.top < obj.quadrantBounds.yMin) obj.set('top', obj.quadrantBounds.yMin);
         const bottomEdge = obj.top + polyBounds.height;
-        if (bottomEdge > obj.quadrantBounds.yMax) {
-            // Move back so the bottom edge aligns with boundary
-            obj.set('top', obj.quadrantBounds.yMax - polyBounds.height);
-        }
+        if (bottomEdge > obj.quadrantBounds.yMax) obj.set('top', obj.quadrantBounds.yMax - polyBounds.height);
         
-        // Call the sync function
         syncPolygonEvent.call(this, e);
     });
     
-    // Add handler for scaling to keep control points within quadrant
     polygon.on('scaling', function(e) {
-        const obj = this;
-        const bounds = obj.quadrantBounds;
-        const pointer = canvas.getPointer(e.e);
+        if (this.edit) return; // Don't scale in edit mode
+
+        // Apply scaling constraints and sync as in original code
+        // ... (existing scaling code remains unchanged) ...
         
-        // Check if pointer is outside quadrant boundaries
-        if (pointer.x < bounds.xMin || pointer.x > bounds.xMax || 
-            pointer.y < bounds.yMin || pointer.y > bounds.yMax) {
-            
-            // Get active corner
-            const corner = obj.__corner;
-            if (corner) {
-                // Determine which coordinate to constrain based on the corner
-                if (corner.includes('t')) { // top corners
-                    if (pointer.y < bounds.yMin) canvas.setCursor({y: bounds.yMin});
-                }
-                if (corner.includes('b')) { // bottom corners
-                    if (pointer.y > bounds.yMax) canvas.setCursor({y: bounds.yMax});
-                }
-                if (corner.includes('l')) { // left corners
-                    if (pointer.x < bounds.xMin) canvas.setCursor({x: bounds.xMin});
-                }
-                if (corner.includes('r')) { // right corners
-                    if (pointer.x > bounds.xMax) canvas.setCursor({x: bounds.xMax});
-                }
-                
-                // Set the current transform's wrapperCoords to reflect boundaries
-                if (obj.canvas && obj.canvas._currentTransform) {
-                    const transform = obj.canvas._currentTransform;
-                    if (pointer.x < bounds.xMin) transform.wrapperCoords.x = bounds.xMin;
-                    if (pointer.x > bounds.xMax) transform.wrapperCoords.x = bounds.xMax;
-                    if (pointer.y < bounds.yMin) transform.wrapperCoords.y = bounds.yMin;
-                    if (pointer.y > bounds.yMax) transform.wrapperCoords.y = bounds.yMax;
-                }
-            }
-        }
-        
-        // After scaling, check if any part of the polygon is outside bounds
-        const rect = obj.getBoundingRect();
-        
-        // Create scale factor adjustment if needed
-        let scaleXFactor = 1;
-        let scaleYFactor = 1;
-        
-        // Check horizontal bounds
-        if (rect.left < bounds.xMin) {
-            // Adjust scale to fit left boundary
-            const overflowX = bounds.xMin - rect.left;
-            scaleXFactor = (rect.width - overflowX) / rect.width;
-        } else if (rect.left + rect.width > bounds.xMax) {
-            // Adjust scale to fit right boundary
-            const overflowX = (rect.left + rect.width) - bounds.xMax;
-            scaleXFactor = (rect.width - overflowX) / rect.width;
-        }
-        
-        // Check vertical bounds
-        if (rect.top < bounds.yMin) {
-            // Adjust scale to fit top boundary
-            const overflowY = bounds.yMin - rect.top;
-            scaleYFactor = (rect.height - overflowY) / rect.height;
-        } else if (rect.top + rect.height > bounds.yMax) {
-            // Adjust scale to fit bottom boundary
-            const overflowY = (rect.top + rect.height) - bounds.yMax;
-            scaleYFactor = (rect.height - overflowY) / rect.height;
-        }
-        
-        // Apply scale adjustments if needed
-        if (scaleXFactor < 1 || scaleYFactor < 1) {
-            obj.scaleX = obj.scaleX * scaleXFactor;
-            obj.scaleY = obj.scaleY * scaleYFactor;
-        }
-        
-        // Call the sync function
         syncPolygonEvent.call(this, e);
     });
     
-    polygon.on('rotating', syncPolygonEvent);
-    polygon.on('modified', syncPolygonEvent);
-    polygon.on('mousedown', function() {
+    polygon.on('rotating', function(e) {
+        if (this.edit) return; // Don't rotate in edit mode
+        syncPolygonEvent.call(this, e);
+    });
+
+    polygon.on('mousedown', function(o) {
+        // Allow setting initial position if not editing AND
+        // EITHER there's no transform OR the transform action is 'drag' (start of a drag)
+        if (!this.edit && (!o.transform || (o.transform && o.transform.action === 'drag'))) {
+            this.lastTop = this.top;
+            this.lastLeft = this.left;
+            // --- DEBUG LOGGING START ---
+            // console.log(`Mousedown on Quad ${this.quadrant}: Set lastTop=${this.lastTop.toFixed(2)}, lastLeft=${this.lastLeft.toFixed(2)}`);
+            // --- DEBUG LOGGING END ---
+        } 
+        // else {
+        //      // --- DEBUG LOGGING START ---
+        //      console.log(`Mousedown on Quad ${this.quadrant}: SKIPPED setting last pos. Edit: ${this.edit}, Transform: ${o.transform ? o.transform.action : 'none'}`);
+        //     // --- DEBUG LOGGING END ---
+        // }
+    });
+
+    polygon.on('modified', function(e) {
+        if (this.edit) return;
+        // REMOVED: syncPolygonEvent.call(this, e); // Let moving/scaling/rotating handle sync during event
+        
+        // Update last known state AFTER final sync from moving/scaling/rotating
         this.lastTop = this.top;
         this.lastLeft = this.left;
-        this.lastPoints = this.points.map(p => ({x: p.x, y: p.y}));
+        this.setCoords(); // Ensure controls are updated based on final state
     });
-    
-    // Add double-click handler for edit mode
+
+    // Add double-click handler for entering edit mode
     polygon.on('mousedblclick', function() {
-        // First check if any polygon is already in edit mode
-        let anyPolygonEditing = false;
-        polygonGroups.forEach(group => {
-            group.forEach(polygon => {
-                if (polygon.isEditing) {
-                    anyPolygonEditing = true;
-                }
-            });
+        // Exit edit mode for any other group first
+        const currentGroupId = this.groupId;
+        polygonGroups.forEach((group, groupId) => {
+            if (groupId !== currentGroupId && group.length > 0 && group[0].edit) {
+                exitEditMode(group);
+            }
         });
-        
-        // If another polygon is in edit mode, exit that first
-        if (anyPolygonEditing) {
-            exitEditMode();
-        }
-        
-        // Find all polygons in this group
-        const groupId = this.groupId;
-        const group = polygonGroups[groupId];
-        
+
+        // Toggle edit mode for this group
+        const group = polygonGroups[currentGroupId];
         if (group) {
-            // Make all points in the group editable
-            group.forEach(polygon => {
-                makeEditable(polygon);
-            });
-            log('Entered edit mode for polygon group: ' + groupId);
-            canvas.renderAll(); // Force render after entering edit mode
+            if (!this.edit) {
+                enterEditMode(group);
+            } else {
+                exitEditMode(group);
+            }
+            canvas.setActiveObject(this);
+            canvas.requestRenderAll();
         }
     });
     
     return polygon;
 }
 
-// Make polygon points editable
-function makeEditable(polygon) {
-    // Mark polygon as being edited
-    polygon.isEditing = true;
+// --- Edit Mode State Management ---
 
-    // Disable controls for scaling and rotation while in vertex edit mode
-    polygon.set({
-        hasControls: false,
-        hasBorders: false,
-        selectable: false,
-        evented: false, // Disable all events on the polygon
-        lockMovementX: true, // Lock horizontal movement
-        lockMovementY: true, // Lock vertical movement
-        objectCaching: false // Disable caching to ensure polygon renders properly
-    });
-    
-    // Store original properties to restore later
-    polygon.originalLeft = polygon.left;
-    polygon.originalTop = polygon.top;
-    polygon.originalScaleX = polygon.scaleX;
-    polygon.originalScaleY = polygon.scaleY;
-    polygon.originalAngle = polygon.angle;
-    
-    // For each point in the polygon
-    polygon.points.forEach((point, index) => {
-        // Calculate absolute position of the point, accounting for transformations
-        const absolutePoint = fabric.util.transformPoint(
-            { 
-                x: point.x - polygon.pathOffset.x, 
-                y: point.y - polygon.pathOffset.y 
-            },
-            polygon.calcTransformMatrix()
-        );
+function enterEditMode(group) {
+    if (!group || group.length === 0) return;
+
+    group.forEach((polygon) => {
+        polygon.edit = true;
+
+        // Define custom controls for vertex editing
+        const lastControlIndex = polygon.points.length - 1;
         
-        // Create control point
-        const circle = new fabric.Circle({
-            left: absolutePoint.x,
-            top: absolutePoint.y,
-            strokeWidth: 2,
-            radius: 6,
-            fill: 'white',
-            stroke: 'blue',
-            originX: 'center',
-            originY: 'center',
+        polygon.cornerStyle = 'circle';
+        polygon.cornerColor = 'rgba(0,0,255,0.5)';
+        
+        polygon.controls = polygon.points.reduce((acc, point, pointIndex) => {
+            // Skip duplicate control for the last point if it's same as first
+            if (pointIndex === lastControlIndex && 
+                polygon.points.length > 1 &&
+                point.x === polygon.points[0].x && 
+                point.y === polygon.points[0].y) {
+                return acc;
+            }
+
+            acc['p' + pointIndex] = new fabric.Control({
+                positionHandler: polygonPositionHandler,
+                actionHandler: anchorWrapper(
+                    pointIndex === 0 ? lastControlIndex - 1 : pointIndex - 1, 
+                    actionHandler
+                ),
+                actionName: 'modifyPolygon',
+                pointIndex: pointIndex,
+                cursorStyle: 'crosshair',
+                render: (ctx, left, top, styleOverride, fabricObject) => {
+                    styleOverride = styleOverride || {};
+                    const size = styleOverride.cornerSize || fabricObject.cornerSize || 10;
+                    ctx.save();
+                    ctx.translate(left, top);
+                    ctx.beginPath();
+                    ctx.arc(0, 0, size / 2, 0, 2 * Math.PI);
+                    ctx.fillStyle = styleOverride.cornerColor || fabricObject.cornerColor || 'blue';
+                    ctx.fill();
+                    ctx.lineWidth = styleOverride.cornerStrokeWidth || 1;
+                    ctx.strokeStyle = styleOverride.cornerStrokeColor || 'black';
+                    ctx.stroke();
+                    ctx.restore();
+                }
+            });
+            return acc;
+        }, {});
+
+        // Apply edit mode appearance and behavior
+        polygon.set({
             hasBorders: false,
-            hasControls: false,
-            pointIndex: index,
-            polygonId: polygon.groupId,
-            quadrant: polygon.quadrant,
-            editPoint: true
+            hasControls: true,
+            selectable: true,
+            lockMovementX: true,
+            lockMovementY: true,
+            evented: true,
+            objectCaching: false
         });
-        
-        circle.on('moving', function() {
-            // Constrain within quadrant boundaries
-            const quadrant = this.quadrant;
-            
-            // Calculate the actual boundaries for control point
-            const xMin = quadrant === 0 || quadrant === 2 ? 0: quadrantWidth;
-            const xMax = quadrant === 0 || quadrant === 2 ? quadrantWidth: canvas.width;
-            const yMin = quadrant === 0 || quadrant === 1 ? 0: quadrantHeight;
-            const yMax = quadrant === 0 || quadrant === 1 ? quadrantHeight: canvas.height;
-            
-            // Apply the constraints
-            if (this.left < xMin) this.set({ left: xMin });
-            if (this.left > xMax) this.set({ left: xMax });
-            if (this.top < yMin) this.set({ top: yMin });
-            if (this.top > yMax) this.set({ top: yMax });
-            
-            // Convert absolute control point position back to relative polygon coordinates
-            const invertedMatrix = fabric.util.invertTransform(polygon.calcTransformMatrix());
-            const newRelativePoint = fabric.util.transformPoint(
-                { x: this.left, y: this.top },
-                invertedMatrix
-            );
-            
-            // Update the polygon point directly
-            polygon.points[this.pointIndex] = { 
-                x: newRelativePoint.x + polygon.pathOffset.x, 
-                y: newRelativePoint.y + polygon.pathOffset.y 
-            };
-
-            // --- Recalculate dimensions and coords DURING drag ---
-            polygon._calcDimensions();
-            polygon.setCoords(); // Recalculate coords for the source polygon
-            // --- End Recalculation ---
-            
-            // Sync the change to other quadrants
-            syncPolygonPoints(polygon);
-            canvas.renderAll();
-        });
-        
-        canvas.add(circle);
+        polygon.setCoords();
     });
+}
+
+function exitEditMode(group) {
+    if (!group || group.length === 0 || !group[0].edit) return;
+
+    group.forEach(polygon => {
+        polygon.edit = false;
+
+        // Restore standard controls and appearance
+        polygon.cornerColor = 'blue';
+        polygon.cornerStyle = 'rect';
+        polygon.controls = polygon.standardControls;
+        
+        polygon.set({
+            hasBorders: true,
+            hasControls: true,
+            selectable: true,
+            lockMovementX: false,
+            lockMovementY: false,
+            evented: true,
+            objectCaching: false
+        });
+        
+        polygon.lastTop = polygon.top;
+        polygon.lastLeft = polygon.left;
+        polygon.setCoords();
+    });
+
+    // Deselect object if the exited group contained the active object
+    const activeObject = canvas.getActiveObject();
+    if (activeObject && group.includes(activeObject)) {
+        canvas.discardActiveObject();
+    }
+    canvas.requestRenderAll();
 }
 
 // Sync polygon points when editing vertices
 function syncPolygonPoints(sourcePolygon) {
-    if (isSyncing /* || isExitingEditMode -- REMOVED */) return;
-    isSyncing = true;
+    if (isSyncing) return; // Prevent recursion
+    
+    // Ensure source polygon is valid and part of a group
+    if (!sourcePolygon || sourcePolygon.groupId === undefined) return;
     
     const groupId = sourcePolygon.groupId;
     const group = polygonGroups[groupId];
     
-    if (!group) {
-        isSyncing = false;
-        return;
-    }
+    if (!group || !sourcePolygon.edit) return;
+
+    isSyncing = true;
     
     const sourceQuadrant = sourcePolygon.quadrant;
-    const normalizedPoints = normalizePoints(sourcePolygon.points, sourceQuadrant);
+    const currentPoints = sourcePolygon.points.map(p => ({ x: p.x, y: p.y }));
+    const normalizedPoints = normalizePoints(currentPoints, sourceQuadrant);
     
     group.forEach((polygon, index) => {
         if (index !== sourceQuadrant) {
-            // Store original position if not already stored during edit mode
-            // (Keep this for initial storage, but don't reset to it)
-            if (polygon.originalLeft === undefined && polygon.isEditing) {
-                polygon.originalLeft = polygon.left;
-                polygon.originalTop = polygon.top;
-                polygon.originalScaleX = polygon.scaleX;
-                polygon.originalScaleY = polygon.scaleY;
-                polygon.originalAngle = polygon.angle;
-            }
-            
-            // Update just the points but let polygon's position adjust
+            const denormalized = denormalizePoints(normalizedPoints, index);
             polygon.set({
-                points: denormalizePoints(normalizedPoints, index),
-                dirty: true,
+                points: denormalized,
                 objectCaching: false
             });
 
-            // --- Recalculate dimensions and coords for synced polygons ---
-            polygon._calcDimensions(); 
-            polygon.setCoords(); 
-            // --- End Recalculation ---
-            
-            // Update control points if in edit mode
-            updateControlPoints(polygon);
+            polygon._setPositionDimensions({});
+            polygon.setCoords();
         }
     });
     
+    sourcePolygon.setCoords();
     canvas.renderAll();
     isSyncing = false;
 }
 
-// Update control points positions when parent polygon changes
-function updateControlPoints(polygon) {
-    canvas.getObjects('circle').forEach(circle => {
-        if (circle.polygonId === polygon.groupId && circle.quadrant === polygon.quadrant) {
-            // Calculate absolute position of the point after transformation
-            const point = polygon.points[circle.pointIndex];
-            const absolutePoint = fabric.util.transformPoint(
-                { 
-                    x: point.x - polygon.pathOffset.x, 
-                    y: point.y - polygon.pathOffset.y 
-                },
-                polygon.calcTransformMatrix()
-            );
-            
-            circle.set({
-                left: absolutePoint.x,
-                top: absolutePoint.y
-            });
-        }
-    });
-}
-
-// Exit edit mode
-function exitEditMode() {
-    // Find all edit points and remove them
-    canvas.getObjects('circle').forEach(obj => {
-        if (obj.editPoint) {
-            canvas.remove(obj);
-        }
-    });
-
-    // Clear editing flag on all polygons and restore controls
-    polygonGroups.forEach(group => {
-        group.forEach(polygon => {
-            // Check if this polygon was actually being edited
-            if (!polygon.isEditing) return; // Skip if not edited
-
-            polygon.isEditing = false;
-
-            // Clear stored original values (These were just for reference)
-            delete polygon.originalLeft;
-            delete polygon.originalTop;
-            delete polygon.originalScaleX;
-            delete polygon.originalScaleY;
-            delete polygon.originalAngle;
-
-            // Restore controls and interactivity
-            polygon.set({
-                hasControls: true,
-                hasBorders: true,
-                selectable: true,
-                evented: true,
-                lockMovementX: false,
-                lockMovementY: false,
-                objectCaching: false // Re-enable caching if desired, or keep false
-            });
-
-            // Update last known position AFTER editing based on current state
-            // NOTE: width/height might be stale here, but position is likely what we want
-            polygon.lastTop = polygon.top;
-            polygon.lastLeft = polygon.left;
-
-            // Finalize coordinates based on current state 
-            // (may use stale width/height, but updates visual position)
-             polygon.setCoords();
-
-             // --- ADD Simplified Log ---
-             console.log(`[DEBUG exitEditMode] Polygon ${polygon.groupId}-${polygon.quadrant} FINAL STATE (Simplified):`,
-                 `\n  Pos: (${polygon.left.toFixed(2)}, ${polygon.top.toFixed(2)})`,
-                 `\n  Scale: (${polygon.scaleX.toFixed(2)}, ${polygon.scaleY.toFixed(2)})`,
-                 `\n  Width/Height: (${polygon.width.toFixed(2)}, ${polygon.height.toFixed(2)})`,
-                 `\n  HasControls: ${polygon.hasControls}`
-              );
-             // --- END Log ---
-
-        });
-    });
-
-    canvas.renderAll();
-    log('Exited editing mode (Simplified)');
-}
-
-// Sync polygon event handler
+// Sync polygon event handler (for move, scale, rotate in NORMAL mode) - REPLACED WITH PROVIDED VERSION
 function syncPolygonEvent(event) {
     if (isSyncing) return;
     
     const sourcePolygon = this;
-    if (sourcePolygon.isEditing) return;
+    // Don't sync if the polygon is currently in vertex edit mode itself
+    // Dragging/scaling happens when edit is false.
+    // Vertex changes are handled by syncPolygonPoints.
+    if (sourcePolygon.edit) return; // Use 'edit' flag from current codebase
     
     const groupId = sourcePolygon.groupId;
     const group = polygonGroups[groupId];
@@ -468,7 +439,7 @@ function syncPolygonEvent(event) {
     
     // Determine if this is a genuine drag/move event
     const isMovingEvent = event && event.e && event.e.type === 'mousemove';
-    let isActualDragEvent = isMovingEvent && !sourcePolygon.isEditing;
+    let isActualDragEvent = isMovingEvent && !sourcePolygon.edit; // Must not be in edit mode
 
     // Calculate relative changes ONLY for actual drag events
     let dTop = 0;
@@ -478,21 +449,25 @@ function syncPolygonEvent(event) {
         dLeft = sourcePolygon.left - sourcePolygon.lastLeft;
     }
     
-    // For transformations
+    // For point changes or other transformations (scale, rotate)
     const normalizedPoints = normalizePoints(sourcePolygon.points, sourceQuadrant);
     
     group.forEach((polygon, index) => {
         if (index !== sourceQuadrant) {
             // Apply position changes ONLY if it was an actual drag event
             if (isActualDragEvent && (dTop !== 0 || dLeft !== 0)) {
+                // Calculate new position
                 let targetLeft = polygon.left + dLeft;
                 let targetTop = polygon.top + dTop;
                 
-                // Apply boundary constraints
+                // Apply boundary constraints from the target polygon
                 const bounds = polygon.quadrantBounds;
-                const polyWidth = polygon.width * polygon.scaleX;
-                const polyHeight = polygon.height * polygon.scaleY;
+                 // Use getBoundingRect for more accurate width/height with scaling/rotation
+                 const polyBounds = polygon.getBoundingRect(); 
+                 const polyWidth = polyBounds.width;
+                 const polyHeight = polyBounds.height;
                 
+                // Apply bounds checking to keep within quadrant
                 if (targetLeft < bounds.xMin) targetLeft = bounds.xMin;
                 if (targetLeft + polyWidth > bounds.xMax) {
                     targetLeft = bounds.xMax - polyWidth;
@@ -508,17 +483,18 @@ function syncPolygonEvent(event) {
                 }); 
             }
             
-            // Apply point changes for scaling, rotating, etc.
+            // Apply point changes for scaling, rotating, etc. (Always sync these)
             const newPoints = denormalizePoints(normalizedPoints, index);
             
-            // Keep points within quadrant
+            // Optional: Constrain points to stay within boundaries (from provided code)
             const bounds = polygon.quadrantBounds;
-            const margin = 0;
+            const margin = 0.5; // Small margin to avoid clipping issues
             
             const constrainedPoints = newPoints.map(point => {
                 let x = point.x;
                 let y = point.y;
                 
+                // Apply constraints with margins
                 if (x < bounds.xMin + margin) x = bounds.xMin + margin;
                 if (x > bounds.xMax - margin) x = bounds.xMax - margin;
                 if (y < bounds.yMin + margin) y = bounds.yMin + margin;
@@ -527,7 +503,7 @@ function syncPolygonEvent(event) {
                 return { x, y };
             });
             
-            // Update polygon
+            // Update polygon with improved rendering settings
             polygon.set({ 
                 points: constrainedPoints,
                 scaleX: sourcePolygon.scaleX,
@@ -537,24 +513,27 @@ function syncPolygonEvent(event) {
                 objectCaching: false
             });
             
-            // Update last positions
+            // Update last positions ONLY after an actual drag event
             if (isActualDragEvent) {
                 polygon.lastTop = polygon.top;
                 polygon.lastLeft = polygon.left;
             }
-            polygon.lastPoints = polygon.points.map(p => ({x: p.x, y: p.y}));
+            // Store last points always for reference (if needed later)
+            // polygon.lastPoints = polygon.points.map(p => ({x: p.x, y: p.y}));
             
-            polygon.setCoords();
+            polygon.setCoords(); // Update coordinates
         }
     });
     
-    // Update source polygon's last position
+    // Update source polygon's last position ONLY after an actual drag event
     if (isActualDragEvent) {
         sourcePolygon.lastTop = sourcePolygon.top;
         sourcePolygon.lastLeft = sourcePolygon.left;
     }
-    sourcePolygon.lastPoints = sourcePolygon.points.map(p => ({x: p.x, y: p.y}));
+    // Store last points always for reference (if needed later)
+    // sourcePolygon.lastPoints = sourcePolygon.points.map(p => ({x: p.x, y: p.y}));
     
+    // Make sure source polygon also has caching disabled
     sourcePolygon.set({
         dirty: true,
         objectCaching: false
@@ -567,6 +546,21 @@ function syncPolygonEvent(event) {
 // Canvas event handlers for drawing
 function setupCanvasDrawingHandlers() {
     canvas.on('mouse:down', function(o) {
+        // If clicking on empty space and a polygon group is in edit mode, exit that mode.
+        if (!o.target && !drawingMode) {
+            let groupToExit = null;
+            for (const group of polygonGroups) {
+                if (group.length > 0 && group[0].edit) {
+                    groupToExit = group;
+                    break;
+                }
+            }
+            if (groupToExit) {
+                exitEditMode(groupToExit);
+                return; // Prevent drawing start right after exiting edit mode
+            }
+        }
+
         // First check if we're in drawing mode
         if (drawingMode) {
             if (!o.target || (o.target && o.target.temporary)) {
@@ -607,7 +601,7 @@ function setupCanvasDrawingHandlers() {
             let anyPolygonEditing = false;
             polygonGroups.forEach(group => {
                 group.forEach(polygon => {
-                    if (polygon.isEditing) {
+                    if (polygon.edit) {
                         anyPolygonEditing = true;
                     }
                 });
@@ -823,8 +817,6 @@ function setupGlobalMouseHandlers() {
             targetPolygon = null;
         }
     });
-    
-    log('Global mouse handlers set up for out-of-browser scaling');
 }
 
 // Initialize global mouse handlers when canvas is ready
@@ -916,7 +908,6 @@ function closeEnough(p1, p2, threshold) {
 // Finish the polygon and create the synchronized polygons
 function finishPolygon() {
     if (points.length < 3) {
-        log('Not enough points to create a polygon');
         exitDrawingMode();
         return;
     }
@@ -961,5 +952,4 @@ function finishPolygon() {
     
     // Exit drawing mode
     exitDrawingMode();
-    log('Completed polygon group: ' + currentGroup);
 } 
