@@ -62,8 +62,8 @@ I'm a method developer focused on transforming data into actionable insights. I 
 
 ---
 
-<a class="inline-link" href="projects/project_7.html" style="font-weight: bold;">7. Finding NEMOs: Weaving a New Fishing Net</a>
-<img src=""  style="width: 50%; padding-left: 25%; margin-top: 1rem;"/>
+<a class="inline-link" href="projects/project_7.html" style="font-weight: bold;">7. Finding NEMOs: Weaving a Better Fishing Net (30% performance up)</a>
+<img src="images/nemos_cover.png?raw=true"  style="width: 50%; padding-left: 25%; margin-top: 1rem;"/>
 
 ---
 

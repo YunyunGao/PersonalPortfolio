@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Isolated Table</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style type="text/tailwindcss">
+        body { /* Optional: Remove default body margin inside iframe */
+          margin: 0;
+        }
+        .font-inter {
+             font-family: 'Inter', sans-serif;
+        }
+        /* Style for subscript and superscript to prevent line height changes */
+        sub, sup {
+            font-size: 75%;
+            line-height: 0;
+            position: relative;
+            vertical-align: baseline;
+        }
+        sub {
+            bottom: -0.25em; /* Adjust subscript position */
+        }
+        sup {
+            top: -0.5em; /* Adjust superscript position */
+        }
+    </style>
+</head>
+<body>
+    <div class="mx-auto border border-gray-200 rounded-lg overflow-hidden shadow-sm font-inter overflow-x-auto">
+        <table class="w-full min-w-max text-sm text-left text-gray-700">
+            <thead class="text-xs text-gray-700 uppercase bg-gray-100">
+                <tr>
+                    <th scope="col" class="px-6 py-3 border-r border-gray-200">Method</th>
+                    <th scope="col" class="px-6 py-3 text-left">Input</th>
+                    <th scope="col" class="px-6 py-3 text-right">Precision</th>
+                    <th scope="col" class="px-6 py-3 text-right">Accuracy</th>
+                    <th scope="col" class="px-6 py-3 text-right">Sensitivity</th>
+                    <th scope="col" class="px-6 py-3 text-right">Specificity</th>
+                </tr>
+            </thead>
+            <tbody class="bg-white">
+                <tr class="border-b border-gray-200">
+                    <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap border-r border-gray-200">Statistics only</td>
+                    <td class="px-6 py-4">F<sub>obs</sub></td>
+                    <td class="px-6 py-4 text-right">0.787 &plusmn; 0.045</td>
+                    <td class="px-6 py-4 text-right">0.692 &plusmn; 0.051</td>
+                    <td class="px-6 py-4 text-right">0.750 &plusmn; 0.048</td>
+                    <td class="px-6 py-4 text-right">0.569 &plusmn; 0.055</td>
+                </tr>
+                <tr class="border-b border-gray-200">
+                     <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap border-r border-gray-200">Statistics+Clustering+ML</td>
+                     <td class="px-6 py-4">F<sub>obs</sub>/&sigma;(F<sub>obs</sub>)</td>
+                    <td class="px-6 py-4 text-right">0.927 &plusmn; 0.029</td>
+                    <td class="px-6 py-4 text-right">0.912 &plusmn; 0.031</td>
+                    <td class="px-6 py-4 text-right">0.928 &plusmn; 0.029</td>
+                    <td class="px-6 py-4 text-right">0.887 &plusmn; 0.035</td>
+                </tr>
+                 <tr class="border-b border-gray-200"> <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap border-r border-gray-200">Statistics+Clustering+ML</td>
+                     <td class="px-6 py-4">I<sub>obs</sub>/&sigma;(I<sub>obs</sub>)</td>
+                    <td class="px-6 py-4 text-right">0.935 &plusmn; 0.046</td>
+                    <td class="px-6 py-4 text-right">0.901 &plusmn; 0.056</td>
+                    <td class="px-6 py-4 text-right">0.932 &plusmn; 0.047</td>
+                    <td class="px-6 py-4 text-right">0.814 &plusmn; 0.072</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

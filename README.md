@@ -9,6 +9,15 @@ Thanks for visiting! 🙌
 
 ---
 
+## 📌 Changelog v0.0.6
+
+- Added Project 7
+- Added interactive beamstop mask editor with polygon drawing capabilities
+- Added performance comparison table using iframe
+- Enhanced project description with scientific context and visualizations
+- Added links to published paper and poster
+- Improved responsiveness for complex scientific figures
+
 ## 📌 Changelog v0.0.5
 
 - Added project 6

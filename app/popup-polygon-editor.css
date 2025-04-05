@@ -12,6 +12,24 @@
     --transition: all 0.3s ease;
 }
 
+.open-button {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 4px 8px;
+    margin: auto;
+    border-radius: var(--border-radius);
+    font-size: 16px;
+    cursor: pointer;
+    transition: var(--transition);
+    font-weight: 600;
+}
+
+.open-button:hover {
+    background-color: var(--secondary-color);
+    transform: translateY(-2px);
+}
+
 /* Popup Container */
 .popup-container {
     position: fixed;

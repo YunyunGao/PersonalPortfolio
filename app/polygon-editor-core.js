@@ -409,7 +409,7 @@ function syncPolygonPoints(sourcePolygon) {
                 objectCaching: false
             });
 
-            polygon._setPositionDimensions({});
+            //polygon._setPositionDimensions({});
             polygon.setCoords();
         }
     });
