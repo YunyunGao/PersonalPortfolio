@@ -162,7 +162,7 @@ function refreshCanvasDimensions() {
 
 // Restore Image Loading (fromURL method) and Filter Logic
 function loadBackgroundImage() {
-    const imagePath = '/images/plain.png';
+    const imagePath = '../images/plain.png';
 
     fabric.Image.fromURL(imagePath, function(img) {
         img.scaleToWidth(canvas.width);

@@ -7,7 +7,7 @@
 
 <div style="text-align: justify; overflow-wrap: break-word; hyphens: auto;">
 <p>Imagine you're exploring the vast ocean of scientific data. Among countless useful data points swimming around freely, there are sneaky creatures hiding quietly in the shadows. They look harmless, even normal, but they can cause significant issues if they're not caught early. In crystallography, we call these stealthy troublemakers <a class="inline-link" href="https://auspex.physnet.uni-hamburg.de/pathol/#2" target="_blank">"NEMOs"—Not-Excluded-unMasked-Outliers</a>. In this project, the task was to catch them. </p>
-<p>You can read the full paper <a class="inline-link" href="https://journals.iucr.org/d/issues/2024/10/00/rr5246/" target="_blank">here</a> or have fun with the <a class="inline-link" href="/pdf/NEMO-Finder.pdf" target="_blank">poster</a>.</p>
+<p>You can read the full paper <a class="inline-link" href="https://journals.iucr.org/d/issues/2024/10/00/rr5246/" target="_blank">here</a> or have fun with the <a class="inline-link" href="../pdf/NEMO-Finder.pdf" target="_blank">poster</a>.</p>
 </div>
 
 ---
@@ -87,7 +87,7 @@ In <a class="inline-link" href="https://phys.libretexts.org/Courses/University_o
 </div>
 <!-- Table --> 
 <iframe
-    src="/app/nemos-table.html" 
+    src="../app/nemos-table.html" 
     width="550" 
     height="250" 
     style="border: none; display: block; margin: 20px auto;"
