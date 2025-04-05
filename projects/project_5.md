@@ -19,12 +19,12 @@ In data analytics, choosing the right reasoning approach profoundly impacts reli
 <div style="display: flex; justify-content: center; align-items: center;">
     <div style="display: flex; justify-content: center; width: 120%;">
         <figure style="width: 100%; height: auto; object-fit: contain;">
-            <img src="/images/inductive_reasoning.webp" style="width: 100%; height: auto;">
+            <img src="../images/inductive_reasoning.webp" style="width: 100%; height: auto;">
         </figure>
     </div>
     <div style="display: flex; justify-content: center; width: 100%;">
         <figure style="width: 100%; height: auto; object-fit: contain;">
-            <img src="/images/deductive_reasoning.webp" style="width: 80%; height: auto;">
+            <img src="../images/deductive_reasoning.webp" style="width: 80%; height: auto;">
         </figure>
     </div>
 
@@ -48,7 +48,7 @@ The <strong>CSV-CORMAP</strong> method exemplifies such an information framework
 
 <div style="display: flex; justify-content: center; margin: 2rem 0;">
   <figure style="margin: 0;">
-    <img src="/images/csv_cormap_msba_full.png" alt="csv apt-binding" style="width: 100%; object-fit: cover; object-position: center  50% 50%;">
+    <img src="../images/csv_cormap_msba_full.png" alt="csv apt-binding" style="width: 100%; object-fit: cover; object-position: center  50% 50%;">
     <figcaption>
     (Left) Smoothed-difference scattering curves illustrate subtle and continuous structural changes in full-length MsbA occurring within milliseconds after Mg²⁺-ATP addition. Although multiple incremental changes are apparent, drawing precise conclusions solely from these curves would be challenging without significant prior knowledge or assumptions. (Middle) <strong>CSV-CORMAP</strong> objectively analyzes the absolute scattering profiles in a <strong>model-free manner</strong>, revealing two distinct kinetic stages clearly marked by changes in scattering similarity: a sharp, rapid transition (①) occurring around 150 ms and a subsequent, softer transition (②) spanning several hundred milliseconds. This analysis requires no prior assumptions and can be performed rapidly <strong>on-the-fly</strong>. (Right) Structural models illustrate the conformational cycle of MsbA driven by ATP binding and subsequent nucleotide-binding domain (NBD) dimerization. The first sharp transition (point ①) precisely corresponds to ATP-induced closure of MsbA's cytoplasmic domains, confirmed experimentally at approximately 150 ms. Subsequent sophisticated <a class="inline-link" href="https://en.wikipedia.org/wiki/Principal_component_analysis" target="_blank">principal component analysis (PCA)</a> further identifies NBD dimerization kinetics, fitting an exponential decay with a time constant of 0.05 ± 0.03 s, accurately aligning with the observed timing of the second transition (point ②) in CSV-CORMAP.
     </figcaption>

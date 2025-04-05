@@ -13,15 +13,16 @@
 ---
 
 ### Why Traditional Methods Couldn't Catch NEMOs
+
 <div style="text-align: justify; overflow-wrap: break-word; hyphens: auto;">
 In <a class="inline-link" href="https://phys.libretexts.org/Courses/University_of_California_Davis/Biophysics_200A%3A_Current_Techniques_in_Biophysics/X-ray_Protein_Crystallography" target="_blank">macromolecular X-ray crystallography</a>, scientists collect diffraction patterns to determine the structures of proteins. Sometimes, however, parts of the detector shadowed by a so-called "beamstops". Outliers arise from reflections within areas shadowed by improperly masked or partially masked beamstops are much trickier to handle. Traditional statistics are good at identifying clearly anomalous data, but these NEMOs are different to catch because the statistical filters are simply not robust enough to handle the subtle nature of NEMOs.
 </div>
 
 <div style="display: flex; justify-content: center; margin: 2rem 0;">
   <figure style="margin: 0;">
-    <img src="/images/nemos_mask.png" alt="nemos_statistics" style="width: 100%; object-fit: cover; object-position: center  50% 50%;">
+    <img src="../images/nemos_mask.png" alt="nemos_statistics" style="width: 100%; object-fit: cover; object-position: center  50% 50%;">
     <figcaption style="text-align: justify; margin-top: 0.5rem;" >
-    Example of the experimental origin of NEMOs. The blue dashed polygon highlights the edge of excluded shaded regions recognized by the beamstop mask autogen program. The red dashed polygon highlights the edge of how one would intuitively define a mask, manually created. The beam centre is indicated by the yellow and green crosses. The 50 and 10 Å resolution shells are marked with black rings. Predicted locations of reflections are circled in yellow. Using the blue mask, the similarity of observations <span style="text-decoration: overline;">1</span>20 in (b),1<span style="text-decoration: overline;">2</span>0 in (c) and <span style="text-decoration: overline;">12</span>0 in (d) result in the exclusion of observation 120 in (a). The resulting merged unique reflection 120 would then have a value close to 0, but an `algorithm-acceptable' uncertainty. Using the red mask, the unique reflection 120 can be properly recorded, as the other symmetry-equivalent observations are completely masked. However, in (b) and (c) such a mask results in the masking of unbiased observations (magenta circles).
+    Example of the experimental origin of NEMOs. The blue dashed polygon highlights the edge of excluded shaded regions recognized by the beamstop mask autogen program. The red dashed polygon highlights the edge of how one would intuitively define a mask, manually created. The beam centre is indicated by the yellow and green crosses. The 50 and 10 Å resolution shells are marked with black rings. Predicted locations of reflections are circled in yellow. Using the blue mask, the similarity of observations <span style="text-decoration: overline;">1</span>20 in (b),1<span style="text-decoration: overline;">2</span>0 in (c) and <span style="text-decoration: overline;">12</span>0 in (d) result in the exclusion of observation 120 in (a). The resulting merged unique reflection 120 would then have a value close to 0, but an `algorithm-acceptable' uncertainty. Using the red mask, the unique reflection 120 can be properly recorded, as the other symmetry-equivalent observations are completely masked. However, in (b) and (c) such a mask results in the masking of unbiased observations (magenta circles).
   </figcaption>
   </figure>
 </div>
@@ -39,7 +40,7 @@ In <a class="inline-link" href="https://phys.libretexts.org/Courses/University_o
 
 <div style="display: flex; justify-content: center; margin: 2rem 0;">
   <figure style="margin: 0;">
-    <img src="/images/nemos_statistics.png" alt="nemos_statistics" style="width: 80%; object-fit: cover; object-position: center  50% 50%;">
+    <img src="../images/nemos_statistics.png" alt="nemos_statistics" style="width: 80%; object-fit: cover; object-position: center  50% 50%;">
     <figcaption style="text-align: justify; margin-top: 0.5rem;">
     In X-ray crystallography, weak intensities are a normal part of the data. Traditional statistical methods typically rely on assumptions that work well for stronger signals. However, when the intensities are weak, the inherent noise can blur the line between genuine data and outliers. This makes it challenging for conventional statistics to distinguish between normal, albeit weak, signals and those that are genuinely problematic, leading to either false positives or missed detections of outliers. Image source: <a  href="https://www.ruppweb.org/Garland/default.htm" target="_blank">Rupp's X-ray crystallography</a>.
   </figcaption>
@@ -62,7 +63,7 @@ In <a class="inline-link" href="https://phys.libretexts.org/Courses/University_o
 
 <div style="display: flex; justify-content: center; margin: 2rem 0;">
   <figure style="margin: 0;">
-    <img src="/images/nemos_scheme.png" alt="nemos_statistics" style="width: 60%; object-fit: cover; object-position: center  50% 50%;">
+    <img src="../images/nemos_scheme.png" alt="nemos_statistics" style="width: 60%; object-fit: cover; object-position: center  50% 50%;">
     <figcaption style="text-align: justify; margin-top: 0.5rem;">
     Schematic workflow of the NEMOs-Finding net. The process begins with a low-angle data subset <span style="font-style: italic; font-weight: bold;">A</span>. Subsequently, crystallographic statistics and clustering bootstrapping are performed independently. The overlap between each subcluster <span style="font-style: italic; font-weight: bold;">C<sub>i,j</sub></span> and the set <span style="font-style: italic; font-weight: bold;">O</span> derived from crystallographic statistics is then assessed. This results in the concatenated multiset <span style="font-weight: bold; font-style: italic;">C&#770;</span>, where elements can be recurrent with a certain multiplicity. If an unique element has sufficient multiplicity, it will be included in the output set <span style="font-weight: bold; font-style: italic;">N</span> and categorized as a NEMO. The detection performance is influenced by the hyperparameters t, l and m. Here, an element p is equivalent to indexed 2D coordinates with (x, y) as positional properties in a Euclidean plane.
   </figcaption>
@@ -72,6 +73,7 @@ In <a class="inline-link" href="https://phys.libretexts.org/Courses/University_o
 ---
 
 ### Teaching the Net to Adjust: Semi-Supervised Machine Learning
+
 <div style="text-align: justify; overflow-wrap: break-word; hyphens: auto;">
 <p>Simply combining statistics and clustering wasn't enough. I needed to optimize this net so it didn't accidentally catch healthy data (false positives) or miss actual NEMOs (false negatives). This is where machine learning stepped in. For that,I took a semi-supervised learning approach.</p>
 
@@ -99,10 +101,11 @@ In <a class="inline-link" href="https://phys.libretexts.org/Courses/University_o
 ---
 
 ### Weaving the Perfect Fishing Net: An Integrated Approach
+
 <div style="text-align: justify; overflow-wrap: break-word; hyphens: auto;">
 <p>The true strength of the solution wasn't just statistics, clustering, or machine learning individually, it was how I integrated them. By first screening reflections statistically, then clustering based on density, and finally refining via semi-supervised learning, I created a comprehensive, adaptive net to reliably catch NEMOs automatically.</p>
 
-<p> Think of this as fishing smartly: using initial sonar (statistics) to detect likely areas, then casting an adaptive net (HDBSCAN), and finally adjusting this net’s size and shape (machine learning) based on continuous feedback from the environment.</p>
+<p> Think of this as fishing smartly: using initial sonar (statistics) to detect likely areas, then casting an adaptive net (HDBSCAN), and finally adjusting this net's size and shape (machine learning) based on continuous feedback from the environment.</p>
 
 <p>Ultimately, the solution made a <strong>30% performance improvement</strong> over the traditional method.</p>
 </div>
