@@ -297,8 +297,9 @@ function enterEditMode(group) {
         const lastControlIndex = polygon.points.length - 1;
         
         polygon.cornerStyle = 'circle';
-        polygon.cornerColor = 'rgba(0,0,255,0.5)';
-        
+        polygon.cornerColor = 'rgba(255, 255, 255, 0.5)';
+        polygon.cornerStrokeColor = 'rgba(0,0,255,0.5)';
+
         polygon.controls = polygon.points.reduce((acc, point, pointIndex) => {
             // Skip duplicate control for the last point if it's same as first
             if (pointIndex === lastControlIndex && 
@@ -324,10 +325,10 @@ function enterEditMode(group) {
                     ctx.translate(left, top);
                     ctx.beginPath();
                     ctx.arc(0, 0, size / 2, 0, 2 * Math.PI);
-                    ctx.fillStyle = styleOverride.cornerColor || fabricObject.cornerColor || 'blue';
+                    ctx.fillStyle = styleOverride.cornerColor || fabricObject.cornerColor || 'white';
                     ctx.fill();
-                    ctx.lineWidth = styleOverride.cornerStrokeWidth || 1;
-                    ctx.strokeStyle = styleOverride.cornerStrokeColor || 'black';
+                    ctx.lineWidth = styleOverride.cornerStrokeWidth || 2;
+                    ctx.strokeStyle = styleOverride.cornerStrokeColor || 'blue';
                     ctx.stroke();
                     ctx.restore();
                 }
@@ -409,7 +410,7 @@ function syncPolygonPoints(sourcePolygon) {
                 objectCaching: false
             });
 
-            //polygon._setPositionDimensions({});
+            polygon._setPositionDimensions({});
             polygon.setCoords();
         }
     });
